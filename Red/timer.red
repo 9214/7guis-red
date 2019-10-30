@@ -1,5 +1,6 @@
 Red [
-    Title: "7GUIs task"
+    Title: "Timer"
+    Description: "Solution to one of the 7GUIs tasks"
     Number: 4
     Author: 9214
     Date:   29/10/2019

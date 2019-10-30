@@ -1,5 +1,6 @@
 Red [
-    Title: "7GUIs task"
+    Title: "Flight Booker"
+    Description: "Solution to one of the 7GUIs tasks"
     Number: 3
     Author: 9214
     Date:   29/10/2019
