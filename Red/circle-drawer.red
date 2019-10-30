@@ -13,12 +13,19 @@ distance: func [this that][
 ]
 
 history: make block! 16
+
 view [
     title "Circle Drawer"
     below center
     panel [
-        button "Undo" [canvas/draw: first history: next history]
-        button "Redo" [canvas/draw: first history: back history]
+        button "Undo" [
+            history: next history
+            append clear canvas/draw any [history/1 history]
+        ]
+        button "Redo" [
+            history: back history
+            append clear canvas/draw any [history/1 history]
+        ]
     ]
     canvas: base white 640x480 all-over
         draw make block! 16
@@ -39,11 +46,11 @@ view [
         ]
         on-alt-down [
             selected: active
-            view [
+            view/flags [
                 title "Adjust radius"
                 on-close [insert/only history copy canvas/draw]
                 slider data selected/1 / to float! 70 [selected/1: 70 * face/data]
-            ]
+            ][no-min no-max]
         ]
     do [circles: canvas/draw]
 ]
