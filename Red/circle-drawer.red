@@ -37,20 +37,23 @@ view [
             forall circles [
                 if number? circles/1 [
                     circles/-3: either circles/1 > distance circles/-1 event/offset [
-                        active: circles gray
-                    ][
+                        active: circles
+                        gray
+                    ][  
+                        active: none
                         glass
                     ]
                 ]
             ]
         ]
         on-alt-down [
-            selected: active
-            view/flags [
-                title "Adjust radius"
-                on-close [insert/only history copy canvas/draw]
-                slider data selected/1 / to float! 70 [selected/1: 70 * face/data]
-            ][no-min no-max]
+            if selected: active [
+                view/flags [
+                    title "Adjust radius"
+                    on-close [insert/only history copy canvas/draw]
+                    slider data selected/1 / to float! 70 [selected/1: 70 * face/data]
+                ][no-min no-max]
+            ]
         ]
     do [circles: canvas/draw]
 ]
