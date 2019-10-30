@@ -13,6 +13,10 @@ distance: func [this that][
 ]
 
 history: make block! 16
+update: does [
+    history: remove/part head history back insert/only history copy canvas/draw
+]
+
 
 view [
     title "Circle Drawer"
@@ -31,7 +35,7 @@ view [
         draw make block! 16
         on-down [
             append face/draw compose [fill-pen glass circle (event/offset) 20]
-            insert/only history copy face/draw
+            update
         ]
         on-over [
             forall circles [
@@ -50,7 +54,7 @@ view [
             if selected: active [
                 view/flags [
                     title "Adjust radius"
-                    on-close [insert/only history copy canvas/draw]
+                    on-close [update]
                     slider data selected/1 / to float! 70 [selected/1: 70 * face/data]
                 ][no-min no-max]
             ]
