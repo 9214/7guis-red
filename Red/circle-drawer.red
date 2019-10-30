@@ -17,6 +17,7 @@ update: does [
     history: remove/part head history back insert/only history copy canvas/draw
 ]
 
+set [default maximum][20 70]
 
 view [
     title "Circle Drawer"
@@ -34,7 +35,7 @@ view [
     canvas: base white 640x480 all-over
         draw make block! 16
         on-down [
-            append face/draw compose [fill-pen glass circle (event/offset) 20]
+            append face/draw compose [fill-pen glass circle (event/offset) (default)]
             update
         ]
         on-over [
@@ -55,7 +56,7 @@ view [
                 view/flags [
                     title "Adjust radius"
                     on-close [update]
-                    slider data selected/1 / to float! 70 [selected/1: 70 * face/data]
+                    slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
                 ][no-min no-max]
             ]
         ]
