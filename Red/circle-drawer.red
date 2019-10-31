@@ -55,12 +55,8 @@ view [
         on-over [
             forall circles [
                 if number? circles/1 [
-                    circles/-3: either circles/1 > distance circles/-1 event/offset [
-                        latest: circles
-                        gray
-                    ][  
-                        glass
-                    ]
+                    within?: circles/1 > distance circles/-1 event/offset
+                    circles/-3: do pick [[latest: circles gray] glass] within?
                 ]
             ]
         ]
@@ -73,7 +69,9 @@ view [
                         unless previous = selected/1 [update selected selected/1 previous 1]
                     ]
                     slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
-                ][no-min no-max]
+                ][
+                    no-min no-max
+                ]
             ]
         ]
     do [circles: canvas/draw]
