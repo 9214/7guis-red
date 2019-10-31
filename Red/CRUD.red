@@ -15,7 +15,6 @@ model: deep-reactor [
     ]
     format: func [entry][rejoin [entry/name comma space entry/surname]]
     construct: func [name surname][to map! compose [name: (name) surname: (surname)]]
-
     view: is [
         collect [
             foreach entry data [
@@ -37,7 +36,7 @@ view [
     text "Filter prefix:"
     field react [model/prefix: all [face/data face/text]]
     return
-    listbox: text-list
+    listbox: text-list 170x200
         on-alt-down [face/selected: none]
         on-change [face/extra: at model/data face/selected]
         react [face/data: model/view]
