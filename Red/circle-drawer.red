@@ -14,12 +14,14 @@ distance: func [this that][
 
 history: make block! 16
 
-update: func [position new old part][
-    history: insert/only history reduce [position new old part]
-    history: remove/part head history back history
+update: func [position new old part /local insertion][
+    insertion: back insert/only history reduce [position new old part]
+    history: remove/part head history insertion
 ]
 
 set [default maximum][20 70]
+
+stroke: [fill-pen glass circle (event/offset) (default)]
 
 view [
     title "Circle Drawer"
@@ -27,23 +29,25 @@ view [
     panel [
         button "Undo" [
             unless tail? history [
-                change/part history/1/1 history/1/3 history/1/4
+                chunk: history/1
+                change/part chunk/1 chunk/3 chunk/4
                 history: next history
             ]
         ]
         button "Redo" [
             unless head? history [
                 history: back history
-                change/part history/1/1 history/1/2 history/1/4
+                chunk: history/1
+                change/part chunk/1 chunk/2 chunk/4
             ]
         ]
     ]
     canvas: base white 640x480 all-over
         draw make block! 16
         on-down [
-            append face/draw compose [fill-pen glass circle (event/offset) (default)]
+            append face/draw compose bind stroke 'event
             update
-                position: skip tail face/draw -5
+                position: skip tail face/draw negate length? stroke
                 copy position
                 make block! 0
                 tail face/draw
