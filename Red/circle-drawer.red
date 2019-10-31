@@ -14,8 +14,8 @@ distance: func [this that][
 
 history: make block! 16
 
-update: func [position new old part /local insertion][
-    insertion: back insert/only history reduce [position new old part]
+update: func [position new old /local insertion][
+    insertion: back insert/only history reduce [position new old length? to block! new]
     history: remove/part head history insertion
 ]
 
@@ -50,7 +50,6 @@ view [
                 position: skip tail face/draw negate length? stroke
                 copy position
                 make block! 0
-                tail face/draw
         ]
         on-over [
             forall circles [
@@ -62,13 +61,11 @@ view [
         ]
         on-alt-down [
             if latest/-3 = gray [
-                previous: first selected: latest
+                old: first picked: latest
                 view/flags [
                     title "Adjust radius"
-                    on-close [
-                        unless previous = selected/1 [update selected selected/1 previous 1]
-                    ]
-                    slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
+                    on-close [unless old = picked/1 [update picked picked/1 old]]
+                    slider data picked/1 / to float! maximum [picked/1: maximum * face/data]
                 ][
                     no-min no-max
                 ]
