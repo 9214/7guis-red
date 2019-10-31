@@ -6,28 +6,35 @@ Red [
     Needs:  View
 ]
 
-set [limit rate][0:0:10 0:0:0.001]
-
-reset: does [
-    duration/extra: duration/data * limit
-    estimation/extra: now/time/precise
-    estimation/rate: rate
+format: func [value][
+    value: form to float! value
+    rejoin [take/part value skip find/tail value dot 2 space "sec."]
 ]
 
-view [
+set [limit rate][0:0:20 0:0:0.001]
+
+reset: does [
+    timer/extra: now/time/precise
+    timer/rate: rate
+]
+
+view/flags [
     title "Timer"
     below
     progress react later [
-        face/data: subtract 100% duration/extra - estimation/data / duration/extra
+        face/data: subtract 100% duration/extra - timer/data / duration/extra
+        if timer/data >= duration/extra [timer/rate: none]
     ]
-    estimation: text on-time [
-        face/data: now/time/precise - face/extra
-        if estimation/data >= duration/extra [estimation/rate: none]
+    timer: base 0x0 rate rate on-time [
+        face/data: now/time/precise - timer/extra
+        estimation/text: format face/data
     ]
-    duration: slider 50% [
-        face/extra: face/data * limit
-        unless estimation/data >= duration/extra [estimation/rate: rate]
-    ]
+    estimation: text
+    duration: slider 50% 
+        on-change [unless timer/data >= duration/extra [timer/rate: rate]]
+        react [face/extra: face/data * limit]
     button "Reset" [reset]
     do [reset]
+][
+    no-min no-max
 ]
