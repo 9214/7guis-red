@@ -1,9 +1,9 @@
 Red [
     Title: "Circle Drawer"
-    Description: "Solution to one of the 7GUIs tasks"
     Number: 6
     Author: 9214
     Date:   30/10/2019
+    Needs:  View
 ]
 
 distance: func [this that][

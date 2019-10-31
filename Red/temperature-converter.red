@@ -1,9 +1,9 @@
 Red [
     Title: "Temperature Converter"
-    Description: "Solution to one of the 7GUIs tasks"
     Number: 2
     Author: 9214
     Date:   29/10/2019
+    Needs:  View
 ]
 
 view [

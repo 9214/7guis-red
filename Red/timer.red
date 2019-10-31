@@ -1,9 +1,9 @@
 Red [
     Title: "Timer"
-    Description: "Solution to one of the 7GUIs tasks"
     Number: 4
     Author: 9214
     Date:   29/10/2019
+    Needs:  View
 ]
 
 set [limit rate][0:0:10 0:0:0.001]
