@@ -29,16 +29,16 @@ view [
     panel [
         button "Undo" [
             unless tail? history [
-                chunk: history/1
-                change/part chunk/1 chunk/3 chunk/4
+                delta: history/1
+                change/part delta/1 delta/3 delta/4
                 history: next history
             ]
         ]
         button "Redo" [
             unless head? history [
                 history: back history
-                chunk: history/1
-                change/part chunk/1 chunk/2 chunk/4
+                delta: history/1
+                change/part delta/1 delta/2 delta/4
             ]
         ]
     ]
