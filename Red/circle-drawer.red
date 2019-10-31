@@ -13,8 +13,9 @@ distance: func [this that][
 ]
 
 history: make block! 16
-update: does [
-    history: remove/part head history back insert/only history copy canvas/draw
+
+update: func [position new old][
+    history: remove/part head history back insert/only history reduce [position new old]
 ]
 
 set [default maximum][20 70]
@@ -24,12 +25,16 @@ view [
     below center
     panel [
         button "Undo" [
-            history: next history
-            append clear canvas/draw any [history/1 history]
+            unless tail? history [
+                change/part history/1/1 history/1/3 tail history/1/1
+                history: next history
+            ]
         ]
         button "Redo" [
-            history: back history
-            append clear canvas/draw any [history/1 history]
+            unless head? history [
+                history: back history
+                change/part history/1/1 history/1/2 tail history/1/1
+            ]
         ]
     ]
     canvas: base white 640x480 all-over
@@ -37,6 +42,9 @@ view [
         on-down [
             append face/draw compose [fill-pen glass circle (event/offset) (default)]
             update
+                skip tail face/draw -5
+                copy skip tail face/draw -5
+                make block! 0
         ]
         on-over [
             forall circles [
@@ -53,9 +61,12 @@ view [
         ]
         on-alt-down [
             if selected: active [
+                previous: selected/1
                 view/flags [
                     title "Adjust radius"
-                    on-close [update]
+                    on-close [
+                        update selected selected/1 previous 
+                    ]
                     slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
                 ][no-min no-max]
             ]
