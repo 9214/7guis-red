@@ -43,31 +43,28 @@ view [
         on-down [
             append face/draw compose [fill-pen glass circle (event/offset) (default)]
             update
-                skip tail face/draw -5
-                copy skip tail face/draw -5
+                position: skip tail face/draw -5
+                copy position
                 make block! 0
         ]
         on-over [
             forall circles [
                 if number? circles/1 [
                     circles/-3: either circles/1 > distance circles/-1 event/offset [
-                        active: circles
+                        latest: circles
                         gray
                     ][  
-                        active: none
                         glass
                     ]
                 ]
             ]
         ]
         on-alt-down [
-            if selected: active [
-                previous: selected/1
+            if latest/-3 = gray [
+                previous: first selected: latest
                 view/flags [
                     title "Adjust radius"
-                    on-close [
-                        unless previous = selected/1 [update selected selected/1 previous]
-                    ]
+                    on-close [unless previous = selected/1 [update selected selected/1 previous]]
                     slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
                 ][no-min no-max]
             ]
