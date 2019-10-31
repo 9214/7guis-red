@@ -14,8 +14,8 @@ distance: func [this that][
 
 history: make block! 16
 
-update: func [position new old][
-    history: insert/only history reduce [position new old]
+update: func [position new old part][
+    history: insert/only history reduce [position new old part]
     history: remove/part head history back history
 ]
 
@@ -27,14 +27,14 @@ view [
     panel [
         button "Undo" [
             unless tail? history [
-                change/part history/1/1 history/1/3 tail history/1/1
+                change/part history/1/1 history/1/3 history/1/4
                 history: next history
             ]
         ]
         button "Redo" [
             unless head? history [
                 history: back history
-                change/part history/1/1 history/1/2 tail history/1/1
+                change/part history/1/1 history/1/2 history/1/4
             ]
         ]
     ]
@@ -46,6 +46,7 @@ view [
                 position: skip tail face/draw -5
                 copy position
                 make block! 0
+                tail face/draw
         ]
         on-over [
             forall circles [
@@ -64,7 +65,9 @@ view [
                 previous: first selected: latest
                 view/flags [
                     title "Adjust radius"
-                    on-close [unless previous = selected/1 [update selected selected/1 previous]]
+                    on-close [
+                        unless previous = selected/1 [update selected selected/1 previous 1]
+                    ]
                     slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
                 ][no-min no-max]
             ]
