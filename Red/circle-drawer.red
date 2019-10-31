@@ -15,7 +15,8 @@ distance: func [this that][
 history: make block! 16
 
 update: func [position new old][
-    history: remove/part head history back insert/only history reduce [position new old]
+    history: insert/only history reduce [position new old]
+    history: remove/part head history back history
 ]
 
 set [default maximum][20 70]
@@ -65,7 +66,7 @@ view [
                 view/flags [
                     title "Adjust radius"
                     on-close [
-                        update selected selected/1 previous 
+                        unless previous = selected/1 [update selected selected/1 previous]
                     ]
                     slider data selected/1 / to float! maximum [selected/1: maximum * face/data]
                 ][no-min no-max]
