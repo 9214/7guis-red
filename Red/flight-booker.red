@@ -29,7 +29,8 @@ view [
         ]
         react [
             face/enabled?: all [
-                date? one-way/data date? two-way/data
+                date? one-way/data
+                date? two-way/data
                 any [
                     not two-way/enabled?
                     all [one-way/data <= two-way/data option/selected = 2]
