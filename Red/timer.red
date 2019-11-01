@@ -6,7 +6,7 @@ Red [
     Needs:  View
 ]
 
-set [start limit] reduce [now/time 0:0:20]
+set [start limit] reduce [now/time/precise 0:0:20]
 
 view/flags [
     title "Timer"
@@ -17,7 +17,7 @@ view/flags [
         if 100% > elapsed/data: time / duration/extra [face/data: round time]
     ]
     duration: slider 50% react [face/extra: face/data * limit]
-    button "Reset" [start: now/time]
+    button "Reset" [start: now/time/precise]
 ][
     no-min no-max
 ]
