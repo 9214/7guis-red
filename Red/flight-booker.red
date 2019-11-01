@@ -15,7 +15,7 @@ view [
         on-key-up [face/color: unless date? face/data [red]]
     one-way: date
     two-way: date react [face/enabled?: option/selected = 2]
-    button
+    button "Book"
         on-click [
             view [
                 title "Confirmation"
