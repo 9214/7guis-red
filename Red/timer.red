@@ -8,7 +8,7 @@ Red [
 
 set [start limit] reduce [now/time/precise 0:0:20]
 
-view/flags [
+view [
     title "Timer"
     below
     elapsed: progress
@@ -18,6 +18,4 @@ view/flags [
     ]
     duration: slider 50% react [face/extra: face/data * limit]
     button "Reset" [start: now/time/precise]
-][
-    no-min no-max
 ]
