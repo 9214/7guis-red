@@ -49,7 +49,7 @@ view [
             update
                 position: skip tail face/draw negate length? stroke
                 copy position
-                make block! 0
+                []
         ]
         on-over [
             forall circles [
