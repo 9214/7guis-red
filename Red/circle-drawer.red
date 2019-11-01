@@ -14,8 +14,9 @@ distance: func [this that][
 
 history: make block! 16
 
-update: func [position new old /local insertion][
-    insertion: back insert/only history reduce [position new old length? to block! new]
+update: function [position new old /extern history][
+    delta: reduce [position new old length? to block! new]
+    insertion: back insert/only history
     history: remove/part head history insertion
 ]
 
