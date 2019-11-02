@@ -21,11 +21,14 @@ process: function [face /local match][
         ]
     ]
     face/extra/formula: copy face/text
+    face/data: none
     if face/extra/relation [react/unlink face/extra/relation 'all]
     face/extra/relation: reduce [
         to set-path! reduce [face/extra/name 'text] 'mold/only 'math/safe expression
     ]
-    unless react face/extra/relation [do face/extra/relation]
+    expression: react face/extra/relation
+    react/unlink face/extra/relation face
+    unless expression [do face/extra/relation]
 ]
 
 set [label! cell!] layout/only [
