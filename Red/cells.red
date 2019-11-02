@@ -13,38 +13,41 @@ cell?: func [value [any-type!]][
 
 process: function [face /local match][
     if all [face/data series? face/data][
-        formula: copy face/data
-        parse expression: next copy formula [
+        parse expression: next copy/deep face/data rule: [
             any [
-                ahead [set match word!]
+                ahead [any-list! into rule | set match word!]
                 if (cell? get/any match)
                 change only skip (make path! reduce [match 'data])
                 | skip
             ]
         ]
+        formula: copy face/text
         face/data: none
-        if face/data: math/safe expression [
-            face/extra/old: face/data
-            face/extra/formula: formula
+        if set/any 'result math/safe expression [
+            face/extra/formula: formula face/text: mold :result
         ]
     ]
 ]
 
 set [label! cell!] layout/only [
     base silver center middle
-    field
-        on-focus [
-            face/color: linen
-            if face/extra/formula [
-                face/extra/old: face/data
-                face/data: face/extra/formula
-            ]
-        ]
+    field right font-size 8
+        on-focus [face/color: linen]
         on-unfocus [
             face/color: none
-            if all [face/extra/old face/extra/formula][face/data: face/extra/old]
+            either face/data [
+                if formula? face/text [face/text: face/extra/old]
+            ][
+                face/extra/formula: none
+            ]
         ]
         on-enter [if formula? face/text [process face]]
+        on-dbl-click [
+            if face/extra/formula [
+                face/extra/old: copy face/text
+                face/text: copy face/extra/formula
+            ]
+        ]
 ]
 
 shape: 5x9
@@ -55,7 +58,7 @@ grid: reduce collect [
             column: #"A" + x - 2
             type: get pick [label! cell!] to logic! any [x = 1 y = 1]
             face: keep make type [
-                size: 96x24
+                size: 60x20
                 offset: subtract 1 + size * as-pair x y size
                 text: case [
                     all [x = 1 y = 1][none]
