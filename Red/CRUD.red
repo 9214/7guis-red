@@ -18,10 +18,7 @@ model: deep-reactor [
     view: is [
         collect [
             foreach entry data [
-                if any [
-                    not prefix
-                    attempt [head? find/case entry/surname prefix]
-                ][
+                if any [not prefix attempt [head? find/case entry/surname prefix]][
                     keep format entry
                 ]
             ]
@@ -34,7 +31,7 @@ system/view/VID/GUI-rules/active?: no
 view [
     title "CRUD"
     text "Filter prefix:"
-    field react [model/prefix: all [face/data face/text]]
+    field react [model/prefix: if face/data [face/text]]
     return
     listbox: text-list 170x200
         on-alt-down [face/selected: none]
@@ -46,16 +43,15 @@ view [
     ]
     return
     button "Create" [
-        all [
-            name/data surname/data
+        if all [name/data surname/data][
             append model/data model/construct copy name/text copy surname/text
         ]
     ]
     button "Update" react [face/enabled?: to logic! listbox/selected][
         entry: listbox/extra/1
-        all [
-            name/data entry/name: copy name/text
-            surname/data entry/surname: copy surname/text
+        case/all [
+            name/data [entry/name: copy name/text]
+            surname/data [entry/surname: copy surname/text]
         ]
         ; force MODEL/VIEW update (MAP! is not a reactive source)
         append model/data []
