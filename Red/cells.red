@@ -6,27 +6,26 @@ Red [
     Needs:  View
 ]
 
-formula?: func [text][all [text text/1 = #"="]]
+formula?: func [text][all [string? text #"=" = first trim/head copy text]]
 cell?: func [value [any-type!]][
-    to logic! all [object? :value equal? class-of value class-of cell!]
+    all [object? :value equal? class-of value class-of cell!]
 ]
 
 process: function [face /local match][
-    if all [face/data series? face/data][
-        parse expression: next copy/deep face/data rule: [
-            any [
-                ahead [any-list! into rule | set match word!]
-                if (cell? get/any match)
-                change only skip (make path! reduce [match 'data])
-                | skip
-            ]
-        ]
-        formula: copy face/text
-        face/data: none
-        if set/any 'result math/safe expression [
-            face/extra/formula: formula face/text: mold :result
+    parse expression: next copy/deep face/data rule: [
+        any [
+            ahead [any-list! into rule | set match word!]
+            if (cell? get/any match)
+            change only skip (make path! reduce [match 'data])
+            | skip
         ]
     ]
+    face/extra/formula: copy face/text
+    if face/extra/relation [react/unlink face/extra/relation 'all]
+    face/extra/relation: reduce [
+        to set-path! reduce [face/extra/name 'text] 'mold/only 'math/safe expression
+    ]
+    unless react face/extra/relation [do face/extra/relation]
 ]
 
 set [label! cell!] layout/only [
@@ -34,18 +33,26 @@ set [label! cell!] layout/only [
     field right font-size 8
         on-focus [face/color: linen]
         on-unfocus [
-            face/color: none
-            either face/data [
-                if formula? face/text [face/text: face/extra/old]
-            ][
-                face/extra/formula: none
+            face/color: if face/extra/relation [mint + 111]
+            if all [face/extra/old formula? face/text][
+                face/text: face/extra/old
             ]
         ]
-        on-enter [if formula? face/text [process face]]
+        on-enter [
+            if formula? face/text [process face]
+            if all [
+                face/extra/formula
+                empty? face/extra/formula
+                face/extra/relation
+            ][
+                react/unlink face/extra/relation 'all
+                face/extra/relation: none
+            ]
+        ]
         on-dbl-click [
             if face/extra/formula [
                 face/extra/old: copy face/text
-                face/text: copy face/extra/formula
+                face/text: face/extra/formula
             ]
         ]
 ]
@@ -54,23 +61,20 @@ shape: 5x9
 grid: reduce collect [
     repeat y shape/y + 1 [
         repeat x shape/x + 1 [
-            row: y - 1
-            column: #"A" + x - 2
+            set [row column] reduce [y - 1 #"A" + x - 2]
             type: get pick [label! cell!] to logic! any [x = 1 y = 1]
             face: keep make type [
-                size: 60x20
+                size: 80x20
                 offset: subtract 1 + size * as-pair x y size
                 text: case [
-                    all [x = 1 y = 1][none]
+                    all [x = 1 y = 1] none
                     x = 1 [form row]
                     y = 1 [form column]
                 ]
-                extra: object [
-                    formula: old: none
-                ]
+                extra: object [relation: formula: old: name: none]
             ]
             unless any [column < #"A" zero? row][
-                set to word! rejoin [column row] face
+                set face/extra/name: to word! rejoin [column row] face
             ]
         ]
     ]
@@ -79,6 +83,6 @@ grid: reduce collect [
 view make face! [
     text: "Cells"
     type: 'window
-    size: face/offset + face/size + 1
+    size: face/offset + face/size
     pane: grid
 ]
