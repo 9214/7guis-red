@@ -37,8 +37,8 @@ set [label! cell!] layout/only [
         on-focus [face/color: linen]
         on-unfocus [
             face/color: if face/extra/relation [mint + 111]
-            if all [face/extra/old formula? face/text][
-                face/text: face/extra/old
+            if all [face/extra/value formula? face/text][
+                face/text: face/extra/value
             ]
         ]
         on-enter [
@@ -54,7 +54,7 @@ set [label! cell!] layout/only [
         ]
         on-dbl-click [
             if face/extra/formula [
-                face/extra/old: copy face/text
+                face/extra/value: copy face/text
                 face/text: face/extra/formula
             ]
         ]
@@ -74,7 +74,7 @@ grid: reduce collect [
                     x = 1 [form row]
                     y = 1 [form column]
                 ]
-                extra: object [relation: formula: old: name: none]
+                extra: object [relation: formula: value: name: none]
             ]
             unless any [column < #"A" zero? row][
                 set face/extra/name: to word! rejoin [column row] face
