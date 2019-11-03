@@ -16,7 +16,7 @@ history: make block! 16
 
 update: function [position new old /extern history][
     delta: reduce [position new old length? to block! new]
-    insertion: back insert/only history
+    insertion: back insert/only history delta
     history: remove/part head history insertion
 ]
 
@@ -56,7 +56,7 @@ view [
             forall circles [
                 if number? circles/1 [
                     within?: circles/1 > distance circles/-1 event/offset
-                    circles/-3: do pick [[latest: circles gray] glass] within?
+                    circles/-3: either within? [latest: circles gray][glass]
                 ]
             ]
         ]
