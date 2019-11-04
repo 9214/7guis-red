@@ -12,11 +12,11 @@ cell?: func [value [any-type!]][
 ]
 
 process: function [face /local match][
+    cell: [set match word! if (cell? get/any match)]
     parse expression: next copy/deep face/data rule: [
         any [
-            ahead [any-list! into rule | set match word!]
-            if (cell? get/any match)
-            change only skip (make path! reduce [match 'data])
+            ahead paren! into rule
+            | change only cell (make path! reduce [match 'data])
             | skip
         ]
     ]
@@ -24,7 +24,8 @@ process: function [face /local match][
     face/data: none
     if face/extra/relation [react/unlink face/extra/relation 'all]
     face/extra/relation: reduce [
-        to set-path! reduce [face/extra/name 'text] 'mold/only 'math/safe expression
+        to set-path! reduce [face/extra/name 'text]
+        'mold/only 'math/safe expression
     ]
     expression: react face/extra/relation
     react/unlink face/extra/relation face
