@@ -32,9 +32,9 @@ process: function [face /local match][
     unless expression [do face/extra/relation]
 ]
 
-set [label! cell!] layout/only [
-    base silver center middle
-    field right font-size 8
+layout [
+    label!: base silver center middle
+    cell!: field right font-size 8
         on-focus [face/color: linen]
         on-unfocus [
             face/color: if face/extra/relation [mint + 111]
