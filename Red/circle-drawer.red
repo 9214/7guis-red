@@ -45,13 +45,6 @@ view [
     ]
     canvas: base white 640x480 all-over
         draw make block! 16
-        on-down [
-            append face/draw compose bind stroke 'event
-            update
-                position: skip tail face/draw negate length? stroke
-                copy position
-                []
-        ]
         on-over [
             forall circles [
                 if number? circles/1 [
@@ -59,6 +52,13 @@ view [
                     circles/-3: either within? [latest: circles gray][glass]
                 ]
             ]
+        ]
+        on-down [
+            append face/draw compose bind stroke 'event
+            update
+                position: skip tail face/draw negate length? stroke
+                copy position
+                []
         ]
         on-alt-down [
             if latest/-3 = gray [

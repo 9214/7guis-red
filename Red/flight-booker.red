@@ -16,6 +16,16 @@ view [
     one-way: date
     two-way: date react [face/enabled?: option/selected = 2]
     button "Book"
+        react [
+            face/enabled?: all [
+                date? one-way/data
+                date? two-way/data
+                any [
+                    not two-way/enabled?
+                    all [one-way/data <= two-way/data option/selected = 2]
+                ]
+            ]
+        ]
         on-click [
             view [
                 title "Confirmation"
@@ -24,16 +34,6 @@ view [
                     rejoin [pick [two one] two-way/enabled? "-way flight:"]
                     one-way/data
                     rejoin skip [slash space two-way/data] pick 0x3 two-way/enabled?
-                ]
-            ]
-        ]
-        react [
-            face/enabled?: all [
-                date? one-way/data
-                date? two-way/data
-                any [
-                    not two-way/enabled?
-                    all [one-way/data <= two-way/data option/selected = 2]
                 ]
             ]
         ]
