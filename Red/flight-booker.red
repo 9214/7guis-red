@@ -8,11 +8,11 @@ Red [
 
 view [
     title "Flight Booker"
-    below
-    option: drop-list data ["one-way flight" "return flight"] select 1
-    style date: field
+	style date: field
         data now/date + random 365
         on-key-up [face/color: unless date? face/data [red]]
+    below
+    option: drop-list data ["one-way flight" "return flight"] select 1
     one-way: date
     two-way: date react [face/enabled?: option/selected = 2]
     button "Book"

@@ -7,7 +7,7 @@ Red [
 ]
 
 view [
-    title "Counter"
-    field: field data 0
-    button "Count" [field/data: field/data + 1]
+	title "Counter"
+	entry: field data 0
+	button "Count" [entry/data: entry/data + 1]
 ]

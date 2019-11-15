@@ -6,7 +6,7 @@ Red [
     Needs:  View
 ]
 
-formula?: func [text][all [string? text #"=" = first trim/head copy text]]
+formula?: func [text][all [string? text find/match text "="]]
 cell?: func [value [any-type!]][
     all [object? :value equal? class-of value class-of cell!]
 ]
