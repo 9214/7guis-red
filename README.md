@@ -3,10 +3,10 @@
 [7GUIs benchmark](https://eugenkiss.github.io/7guis) tasks implemented in [Red programming language](https://www.red-lang.org).
 
 This project serves a fourfold purpose:
-1. Fresh take on all seven challenges, without peeking into existing solutions;
-1. Baseline for comparison of Red's approach to GUI programming with other mainstream toolkits;
-1. Evaluation of VID dialect and View engine, search for their potential improvements;
-1. Testbed for GUI backends supported by View.
+* Fresh take on all seven challenges, without peeking into existing solutions;
+* Baseline for comparison of Red's approach to GUI programming with other mainstream toolkits;
+* Evaluation of VID dialect and View engine, search for their potential improvements;
+* Testbed for GUI backends supported by View.
 
 ### Setup
 
