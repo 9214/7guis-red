@@ -44,8 +44,7 @@ view [
 		button "Undo" [history/undo]
 		button "Redo" [history/redo]
 	]
-	canvas: base white 640x480 all-over
-	draw make block! 16
+	canvas: base white 640x480 all-over draw make block! 16
 		on-over [
 			forall circles [
 				if number? circles/1 [
