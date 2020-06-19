@@ -1,7 +1,7 @@
 Red [
 	Title:  "Cells"
 	Number: 7
-	Author: 9214
+	Author: @9214
 	Date:   31/10/2019
 	Needs:  View
 ]
