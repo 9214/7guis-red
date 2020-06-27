@@ -1,0 +1,182 @@
+:toc:
+:numbered:
+
+# Red GUI System: a Case Study
+
+This writeup presents analysis of https://www.red-lang.org/[Red programming language]'s approach to Graphical User Interface (GUI) programming in the form of a case study. It concerns itself with https://eugenkiss.github.io/7guis/tasks[7GUIs tasks] implemented in Red, and was conceived as a research on potential improvements in its https://github.com/red/docs/blob/master/en/gui.adoc[GUI system]: cross-platform graphical engine (View), embedded Domain-Specific Language (eDSL) for declarative user interface specification (Visual Interface Dialect, VID) and, to a lesser extent, eDSL for drawing raster graphics (Draw).footnote:[Due to specificity of 7GUIs tasks Rich-Text Dialect (RTD) was not evaluated.]
+
+It closely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] criteria.
+
+The implementation in question is hosted on https://github.com/9214/7guis-red[Github]; each section below evaluates a respective task's solution according to above-mentioned guidelines.
+
+# Tasks
+
+NOTE: TBD.
+
+§3.1 ¶12.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+Red is considered paradigm-neutral, neither OO nor FP (the dichotomy that Eugen studies in his thesis). "Sustainability of FP in GUI development" ¶3.
+
+Anatomy of virtual tree: interlinked reactive, stateful objects, all inheriting their properties from `face!` prototype ¶1. Virtual, reified interface for the underlying OS-specific widgets. Event-based framework, matching architectures of underlying backends (Win32, Cocoa, GTK). Intuitive, close mapping. VID is declarative, description matches the visual layout. Low conceptual overhead.
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+> Toolkit dominates paradigm for small applications.
+
+## Counter
+
+NOTE: TBD.
+
+> Understanding the basic ideas of a language/toolkit and the essential scaffolding.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+## Temperature Converter
+
+NOTE: TBD.
+
+> Working with bi-directional dataflow, working with user-provided text input.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+## Flight Booker
+
+NOTE: TBD.
+
+> Working with constraints.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+---
+
+Complex predicates and guards.
+
+## Timer
+
+NOTE: TBD.
+
+> Working with concurrency, working with competing user/signal interactions, keeping the application responsive.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+## CRUD
+
+NOTE: TBD.
+
+> Separating the domain and presentation logic, managing mutation, building a non-trivial layout.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+---
+
+MVC pattern.
+
+## Circle Drawer
+
+NOTE: TBD.
+
+> Implementing undo/redo functionality, custom drawing, implementing dialog control (i.e. keeping context between successive GUI operations).
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+---
+
+Persistent data structures. Mention https://gist.github.com/numberjay/3df8f13044145c6dde1918ea2cdfe3b8[PoC]?.
+
+## Cells
+
+NOTE: TBD.
+
+> Implementing change propagation, customizing a widget, implementing a more authentic/involved GUI application.
+
+*Abstraction level*
+
+*Closeness of mapping*
+
+*Hidden dependencies*
+
+*Error-proneness*
+
+*Diffuseness*
+
+*Viscosity*
+
+---
+
+Abstraction level -- abusing `field` as table cell widget and generating layout with metaprogramming.
+
+`gob!`-based spreadsheets and limits of the current approach.
+
+# Desiderata
+
+NOTE: TBD.
