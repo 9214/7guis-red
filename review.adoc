@@ -25,35 +25,37 @@ User interaction happens in an event-based fashion; changes in the underlying OS
 
 Communication between faces (or faces and domain model) is achieved with the help of object ownership system and https://github.com/red/docs/blob/master/en/reactivity.adoc[reactive framework] built on top of it; graphical component updates can be handled either automatically or with manual change propagation.
 
-Constructing virtual tree of faces manually requires proper initialization of each object and its interconnection with parent and child nodes; this is a cumbersome and error-prone process. As such, at the hight level of abstraction user interface is typically described in declarative fashion via VID dialect, and tree of faces is constructed from such description with one of the View API functions, `view` or `layout`.
+Constructing virtual tree of faces manually requires proper initialization of each object and its interconnection with parent and child nodes; this is a cumbersome and error-prone process. As such, at the hight level of abstraction user interface is typically described in declarative fashion via VID dialect, and tree of faces is constructed from such description with one of the View's user-facing functions, `view` or `layout`.
 
-Red GUI system provides a common subset of face types supported by all graphical backends (Win32, Cocoa, GTK, Android). Each backend provides a specific set of guidelines for widget layout, these are handled by View cross-platform metrics system and can be disabled if necessary.
+Red GUI system provides a common subset of face types supported by all graphical backends (Win32, Cocoa, GTK, Android). Each backend provides a specific set of guidelines for widget's layout, these are handled by View cross-platform metrics system and can be disabled if necessary.
 
-Properties of default face types can be customized to the extent allowed by underlying backend's limitations and abstracted away in a dedicated style: via VID `style` keyword, extension of the `system/view/VID/styles` list of templates, or with the help of prototype-based object inheritance. Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code.footnote:[See Boleslav Březovský's http://red.qyz.cz/writing-style.html[article] on custom VID styles as an example.]
+Properties of default face types can be customized to the extent allowed by underlying backend's limitations and abstracted away in a dedicated style: via VID `style` keyword, extension of the `system/view/VID/styles` list of templates, or with the help of prototype-based object inheritance.
 
-NOTE: ↑ desiderata.
+In general, GUI applications made with Red are written at the high level of abstraction. Virtual tree of faces, being an amenable data structure, can be manipulated and extended at run-time with the basic set of language primitives. Such tree is commonly constructed in a semi-automated fashion, as a part of domain-specific dialect processing (such as VID) or metaprogramming facilities.
 
-In general, GUI applications made with Red are written at the high level of abstraction. Virtual tree of faces, being an amenable data structure, can be manipulated and extended at runtime with the basic set of language primitives. Such tree is commonly constructed in a sem-automated fashion, as a part of domain-specific dialect processing, such as VID.
+Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code.footnote:[See Boleslav Březovský's http://red.qyz.cz/writing-style.html[article] on custom VID styles as an example.] Customization of the basic set of widgets is possible to a certain extent, but is ultimately limited due to specificities of the underlying backends.
 
-Such high level of expressiveness is made possible by the synergy of language properties, such as homoiconicity, high degree of polymorphism, syntactically-rich type system and general orientation towards linguistic abstraction and simple semantics of all operations.
-
-However, existing approach to GUI creation doesn't scale well beyond small applications. Internally, View engine relies on OS-provided native graphical components, which can be resource-heavy and not as performant as one wants them to be. Such limited set of components is constrained in graphical look and customization options, which makes it harder to adapt them to domain-specific needs.
-
-Declarative style of VID is not modular and does not permit a level of flexibility necessary to handle large projects: visual layout of widgets, their properties and event-handling logic, while logically separate, tend to be conflated together at the level of VID description.
-
-Existing notation coupled with above-mentioned Red language properties provides means of addressing this concerns; conceptually, however, there seems to be a need for a eDSL with different type of semantics, and for an extension of graphical engine with more lightweight, platform-independent and customizable graphical primitives.footnote:[Such as http://www.rebol.com/r3/docs/view/gobs.html[Rebol3 Graphical Objects] (GOB).] 
-
-NOTE: ↑ desiderata.
+High level of expressiveness is made possible by the synergy of language properties, such as homoiconicity, high degree of polymorphism, syntactically-rich type system and general orientation towards linguistic abstraction and simple semantics of all operations; indeed, both VID and View are the prime examples of this approach towards language design.
 
 #### Closeness of mapping
 
 > How closely does the notation correspond to the problem world?
 
+Historically, object-oriented programming (OOP) is a prevalent paradigm when it comes to GUI programming.footnote:[See introductory chapter in Eugen Kiss' thesis.] In Red, hierarchical composition of stateful objects reflects the underlying structure of modeled graphical interface; prototype-based inheritance ensures that all faces have same properties (such as position, size, visibility), yet each instance is unique in the way said properties are used and customized; object ownership system and reactivity make real-time user interaction possible.
+
+Usage of actors and event-based model has a low conceptual overhead, since they rely on intuitive notions of causality and law of action-reaction.
+
 NOTE: TBD.
 
 Red is considered paradigm-neutral, neither OO nor FP (the dichotomy that Eugen studies in his thesis). "Sustainability of FP in GUI development" ¶3.
 
-Virtual tree of faces maps onto visual hierarchy of graphical widgets ¶1. Event-based framework, matching architectures of underlying backends (Win32, Cocoa, GTK). Intuitive, close mapping. VID is declarative, description matches the visual layout. Low conceptual overhead.
+Event-based framework, matching architectures of underlying backends (Win32, Cocoa, GTK). FRP and reification of event flow. Inversion of control (pub/sub?): right now events are pushed onto face, but it can instead pull them itself periodically. Listener, stream of events and pattern-matching on it. Each reactor maps stream of events from listeners to its own stream (to which other reactors can listen). Ports? Async interactions with external resources, emphasis is on continious, not discrete. Rich set of datatypes for modelling events, can contain contextual info. Orchestration (duh) of distributed services.
+
+VID is declarative, description matches the visual layout. Anecdotal evidence of people understanding VID even without knowing Red.
+
+https://lobste.rs/s/1kxz55/puny_gui_puppy_finder#c_nzxgog
+
+And what is the "problem world"? So far Red was only concerned with small in-house applications. What about PITL, games, animation, plotting?
 
 #### Hidden dependencies
 
@@ -238,6 +240,18 @@ Abstraction level -- abusing `field` as table cell widget and generating layout 
 ## Desiderata
 
 NOTE: TBD.
+
+Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code.footnote:[See Boleslav Březovský's http://red.qyz.cz/writing-style.html[article] on custom VID styles as an example.] Customization of the basic set of widgets is possible to a certain extent, but is ultimately limited due to specificities of underlying backends.
+
+---
+
+However, existing approach to GUI creation doesn't scale well beyond small applications. Internally, View engine relies on OS-provided native graphical components, which can be resource-heavy and not as performant as one wants them to be. Such limited set of components is constrained in graphical look and customization options, which makes it harder to adapt them to domain-specific needs.
+
+Declarative style of VID is not modular and does not permit a level of flexibility necessary to handle large projects: visual layout of widgets, their properties and event-handling logic, while logically separate, tend to be conflated together at the level of VID description.
+
+Existing notation coupled with above-mentioned Red language properties provides means of addressing this concerns; conceptually, however, there seems to be a need for a eDSL with different type of semantics, and for an extension of graphical engine with more lightweight, platform-independent and customizable graphical primitives.footnote:[Such as http://www.rebol.com/r3/docs/view/gobs.html[Rebol3 Graphical Objects] (GOB).]
+
+---
 
 ## Conclusion
 
