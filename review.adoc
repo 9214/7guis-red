@@ -3,13 +3,13 @@
 
 # Red GUI System: a Case Study
 
-# Introduction
+## Introduction
 
 This writeup presents analysis of https://www.red-lang.org/[Red programming language]'s approach to Graphical User Interface (GUI) programming in the form of a case study. It concerns itself with https://eugenkiss.github.io/7guis/tasks[7GUIs tasks] implemented in Red, and was conceived as a research on potential improvements in its https://github.com/red/docs/blob/master/en/gui.adoc[GUI system]: cross-platform graphical engine (View), embedded Domain-Specific Language (eDSL) for declarative user interface specification (Visual Interface Dialect, VID) and, to a lesser extent, eDSL for drawing raster graphics (Draw).footnote:[Due to specificity of 7GUIs tasks Rich-Text Dialect (RTD) was not evaluated.]
 
 The study closely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] (CD) criteria.
 
-# Tasks
+## Tasks
 
 The implementation in question is hosted on https://github.com/9214/7guis-red[Github]; each section below evaluates respective task's solution according to the above-mentioned guidelines. A general overview of Red's GUI system in terms of CD is given so as to explain the basic principles and conceptual framework pertinent to the case study and all provided solutions.
 
@@ -59,7 +59,7 @@ Viscosity:: Are there any inherent barriers to change in the notation? How much 
 
 §3.1 ¶12.
 
-## Counter
+### Counter
 
 NOTE: TBD.
 
@@ -77,7 +77,7 @@ NOTE: TBD.
 
 *Viscosity*
 
-## Temperature Converter
+### Temperature Converter
 
 NOTE: TBD.
 
@@ -95,7 +95,7 @@ NOTE: TBD.
 
 *Viscosity*
 
-## Flight Booker
+### Flight Booker
 
 NOTE: TBD.
 
@@ -117,7 +117,7 @@ NOTE: TBD.
 
 Complex predicates and guards.
 
-## Timer
+### Timer
 
 NOTE: TBD.
 
@@ -135,7 +135,7 @@ NOTE: TBD.
 
 *Viscosity*
 
-## CRUD
+### CRUD
 
 NOTE: TBD.
 
@@ -157,7 +157,7 @@ NOTE: TBD.
 
 MVC pattern.
 
-## Circle Drawer
+### Circle Drawer
 
 NOTE: TBD.
 
@@ -179,7 +179,7 @@ NOTE: TBD.
 
 Persistent data structures. Mention https://gist.github.com/numberjay/3df8f13044145c6dde1918ea2cdfe3b8[PoC]?.
 
-## Cells
+### Cells
 
 NOTE: TBD.
 
@@ -203,11 +203,11 @@ Abstraction level -- abusing `field` as table cell widget and generating layout 
 
 `gob!`-based spreadsheets and limits of the current approach.
 
-# Desiderata
+## Desiderata
 
 NOTE: TBD.
 
-# Conclusion
+## Conclusion
 
 NOTE: TBD.
 
