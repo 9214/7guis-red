@@ -62,7 +62,7 @@ layout [
 ]
 
 shape: 5x9
-grid: reduce collect [
+grid: collect [
 	repeat y shape/y + 1 [
 		repeat x shape/x + 1 [
 			set [row column] reduce [y - 1 #"A" + x - 2]
