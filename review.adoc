@@ -3,35 +3,61 @@
 
 # Red GUI System: a Case Study
 
+# Introduction
+
 This writeup presents analysis of https://www.red-lang.org/[Red programming language]'s approach to Graphical User Interface (GUI) programming in the form of a case study. It concerns itself with https://eugenkiss.github.io/7guis/tasks[7GUIs tasks] implemented in Red, and was conceived as a research on potential improvements in its https://github.com/red/docs/blob/master/en/gui.adoc[GUI system]: cross-platform graphical engine (View), embedded Domain-Specific Language (eDSL) for declarative user interface specification (Visual Interface Dialect, VID) and, to a lesser extent, eDSL for drawing raster graphics (Draw).footnote:[Due to specificity of 7GUIs tasks Rich-Text Dialect (RTD) was not evaluated.]
 
-It closely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] criteria.
-
-The implementation in question is hosted on https://github.com/9214/7guis-red[Github]; each section below evaluates a respective task's solution according to above-mentioned guidelines.
+The study closely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] (CD) criteria.
 
 # Tasks
 
+The implementation in question is hosted on https://github.com/9214/7guis-red[Github]; each section below evaluates respective task's solution according to the above-mentioned guidelines. A general overview of Red's GUI system in terms of CD is given so as to explain the basic principles and conceptual framework pertinent to the case study and all provided solutions.
+
+Abstraction level:: What are the minimum and maximum levels of abstraction exposed by the notation? Can details be encapsulated?
+
+At the lowest level of abstraction GUI is represented as a virtual tree of reactive objects (faces); each such object holds an internal state relevant to a widget that it represents, and inherits its properties from a `face!` prototype.
+
+User interaction happens in an event-based fashion; changes in the underlying OS-specific widget are mapped onto object's state and trigger specified event handlers (actors), and changes in one of the object's properties (facets) are reflected back into widget.
+
+Communication between faces (or faces and domain model) is achieved with the help of object ownership system and https://github.com/red/docs/blob/master/en/reactivity.adoc[reactive framework] built on top of it; graphical component updates can be handled either automatically or with manual change propagation.
+
+Constructing virtual tree of faces manually requires proper initialization of each object and its interconnection with parent and child nodes; this is a cumbersome and error-prone process. As such, at the hight level of abstraction user interface is typically described in declarative fashion via VID dialect, and tree of faces is constructed from such description with one of the View API functions, `view` or `layout`.
+
+Red GUI system provides a common subset of face types supported by all graphical backends (Win32, Cocoa, GTK, Android). Each backend provides a specific set of guidelines for widget layout, these are handled by View cross-platform metrics system and can be disabled if necessary.
+
+Properties of default face types can be customized to the extent allowed by underlying backend's limitations and abstracted away in a dedicated style: via VID `style` keyword, extension of the `system/view/VID/styles` list of templates, or with the help of prototype-based object inheritance. Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code.footnote:[See Boleslav Březovský's http://red.qyz.cz/writing-style.html[article] on custom VID styles as an example.]
+
+NOTE: ↑ desiderata.
+
+In general, GUI applications made with Red are written at the high level of abstraction. Virtual tree of faces, being an amenable data structure, can be manipulated and extended at runtime with the basic set of language primitives. Such tree is commonly constructed in a sem-automated fashion, as a part of domain-specific dialect processing, such as VID.
+
+Such high level of expressiveness is made possible by the synergy of language properties, such as homoiconicity, high degree of polymorphism, syntactically-rich type system and general orientation towards linguistic abstraction and simple semantics of all operations.
+
+However, existing approach to GUI creation doesn't scale well beyond small applications. Internally, View engine relies on OS-provided native graphical components, which can be resource-heavy and not as performant as one wants them to be. Such limited set of components is constrained in graphical look and customization options, which makes it harder to adapt them to domain-specific needs.
+
+Declarative style of VID is not modular and does not permit a level of flexibility necessary to handle large projects: visual layout of widgets, their properties and event-handling logic, while logically separate, tend to be conflated together at the level of VID description.
+
+Existing notation coupled with above-mentioned Red language properties provides means of addressing this concerns; conceptually, however, there seems to be a need for a eDSL with different type of semantics, and for an extension of graphical engine with more lightweight, platform-independent and customizable graphical primitives.footnote:[Such as http://www.rebol.com/r3/docs/view/gobs.html[Rebol3 Graphical Objects] (GOB).] 
+
+NOTE: ↑ desiderata.
+
+Closeness of mapping:: How closely does the notation correspond to the problem world?
+
 NOTE: TBD.
-
-§3.1 ¶12.
-
-*Abstraction level*
-
-*Closeness of mapping*
 
 Red is considered paradigm-neutral, neither OO nor FP (the dichotomy that Eugen studies in his thesis). "Sustainability of FP in GUI development" ¶3.
 
-Anatomy of virtual tree: interlinked reactive, stateful objects, all inheriting their properties from `face!` prototype ¶1. Virtual, reified interface for the underlying OS-specific widgets. Event-based framework, matching architectures of underlying backends (Win32, Cocoa, GTK). Intuitive, close mapping. VID is declarative, description matches the visual layout. Low conceptual overhead.
+Virtual tree of faces maps onto visual hierarchy of graphical widgets ¶1. Event-based framework, matching architectures of underlying backends (Win32, Cocoa, GTK). Intuitive, close mapping. VID is declarative, description matches the visual layout. Low conceptual overhead.
 
-*Hidden dependencies*
+Hidden dependencies:: Are dependencies between entities in the notation visible or hidden? Is every dependency indicated in both directions? Does a change in one area of the notation lead to unexpected consequences?
 
-*Error-proneness*
+Error-proneness:: To what extent does the notation influence the likelihood of the user making a mistake?
 
-*Diffuseness*
+Diffuseness:: How many symbols or how much space does the notation require to produce a certain result or express a meaning?
 
-*Viscosity*
+Viscosity:: Are there any inherent barriers to change in the notation? How much effort is required to make a change to a program expressed in the notation?
 
-> Toolkit dominates paradigm for small applications.
+§3.1 ¶12.
 
 ## Counter
 
@@ -180,3 +206,11 @@ Abstraction level -- abusing `field` as table cell widget and generating layout 
 # Desiderata
 
 NOTE: TBD.
+
+# Conclusion
+
+NOTE: TBD.
+
+> Toolkit dominates paradigm for small applications.
+
+Proliferation of spreadsheets and NoCode / LowCode solutions might require a different model. CRUD-oriented dialect with automatic generation of interfaces e.g. for databases, smart contracts (duh).
