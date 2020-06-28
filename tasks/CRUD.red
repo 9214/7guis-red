@@ -27,13 +27,15 @@ view [
 	list: text-list 170x200
 		on-alt-down [face/selected: none]
 		on-change [
-			face/extra: at model/data index? find/same
-				model/view
-				pick face/data face/selected
+			unless zero? face/selected [
+				face/extra: at model/data index? find/same
+					model/view
+					pick face/data face/selected
+			]
 		]
 		react [
 			database: model/data
-			if empty? face/data: sort collect [
+			face/data: sort collect [
 				forall database [
 					if any [
 						empty? prefix/text
@@ -42,9 +44,8 @@ view [
 						keep pick model/view index? database
 					]
 				]
-			][
-				face/selected: none
 			]
+			if empty? face/data [face/selected: none]
 		]
 	panel [
 		text "Name:" name: field return
@@ -59,14 +60,13 @@ view [
 		]
 	]
 	update: button "Update" [
-		entry: list/extra/1
 		list/selected: none
-		case/all [
-			not empty? name/text [entry/name: copy name/text]
-			not empty? surname/text [entry/surname: copy surname/text]
+		foreach field [name surname][
+			unless empty? entry: select get field 'text [
+				list/extra/1/:field: copy entry  
+			]
 		]
-		append model/data []
 	]
 	delete: button "Delete" [remove list/extra]
-	react [update/enabled?: delete/enabled?: to logic! list/selected]
+	react [update/enabled?: delete/enabled?: make logic! list/selected]
 ]

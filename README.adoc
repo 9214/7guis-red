@@ -29,10 +29,6 @@ The project was tested on all supported View backends with Red https://github.co
 | Progress bar is not updated.
 
 | macOS
-| link:tasks/CRUD.red[CRUD]
-| Updating an entry causes a `none`-related error.
-
-| macOS
 | link:tasks/cells.red[Cells]
 | Spreadsheet cells are unresponsive.
 
