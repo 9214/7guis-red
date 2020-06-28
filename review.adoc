@@ -9,11 +9,15 @@ This writeup presents analysis of https://www.red-lang.org/[Red programming lang
 
 The study closely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] (CD) criteria.
 
-## Tasks
+The implementation in question is hosted in https://github.com/9214/7guis-red[Github repository], along with the original version of this writeup.
 
-The implementation in question is hosted on https://github.com/9214/7guis-red[Github]; each section below evaluates respective task's solution according to the above-mentioned guidelines. A general overview of Red's GUI system in terms of CD is given so as to explain the basic principles and conceptual framework pertinent to the case study and all provided solutions.
+### Overview
 
-Abstraction level:: What are the minimum and maximum levels of abstraction exposed by the notation? Can details be encapsulated?
+A general overview of Red's GUI system in terms of CD is given so as to explain the basic principles and conceptual framework pertinent to the case study and all provided solutions; it can be skipped if the reader is familiar with the subject at hand.
+
+#### Abstraction level
+
+> What are the minimum and maximum levels of abstraction exposed by the notation? Can details be encapsulated?
 
 At the lowest level of abstraction GUI is represented as a virtual tree of reactive objects (faces); each such object holds an internal state relevant to a widget that it represents, and inherits its properties from a `face!` prototype.
 
@@ -41,7 +45,9 @@ Existing notation coupled with above-mentioned Red language properties provides 
 
 NOTE: ↑ desiderata.
 
-Closeness of mapping:: How closely does the notation correspond to the problem world?
+#### Closeness of mapping
+
+> How closely does the notation correspond to the problem world?
 
 NOTE: TBD.
 
@@ -49,15 +55,41 @@ Red is considered paradigm-neutral, neither OO nor FP (the dichotomy that Eugen 
 
 Virtual tree of faces maps onto visual hierarchy of graphical widgets ¶1. Event-based framework, matching architectures of underlying backends (Win32, Cocoa, GTK). Intuitive, close mapping. VID is declarative, description matches the visual layout. Low conceptual overhead.
 
-Hidden dependencies:: Are dependencies between entities in the notation visible or hidden? Is every dependency indicated in both directions? Does a change in one area of the notation lead to unexpected consequences?
+#### Hidden dependencies
 
-Error-proneness:: To what extent does the notation influence the likelihood of the user making a mistake?
+> Are dependencies between entities in the notation visible or hidden? Is every dependency indicated in both directions? Does a change in one area of the notation lead to unexpected consequences?
 
-Diffuseness:: How many symbols or how much space does the notation require to produce a certain result or express a meaning?
+NOTE: TBD.
 
-Viscosity:: Are there any inherent barriers to change in the notation? How much effort is required to make a change to a program expressed in the notation?
+#### Error-proneness
 
-§3.1 ¶12.
+> To what extent does the notation influence the likelihood of the user making a mistake?
+
+NOTE: TBD.
+
+#### Diffuseness
+
+> How many symbols or how much space does the notation require to produce a certain result or express a meaning?
+
+NOTE: TBD.
+
+#### Viscosity
+
+> Are there any inherent barriers to change in the notation? How much effort is required to make a change to a program expressed in the notation?
+
+NOTE: TBD.
+
+## Tasks
+
+NOTE: TBD.
+
+https://eugenkiss.github.io/7guis/tasks
+
+https://eugenkiss.github.io/7guis-React-TypeScript-MobX/
+
+Reference, rationale behind each task, samples.
+
+Each section below evaluates respective task's solution according to the CD guidelines described in <<Introduction>>. See §3.1 ¶12.
 
 ### Counter
 
