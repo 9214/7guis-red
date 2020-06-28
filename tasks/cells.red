@@ -42,6 +42,12 @@ layout [
 				face/text: face/extra/value
 			]
 		]
+		on-dbl-click [
+			if face/extra/formula [
+				face/extra/value: copy face/text
+				face/text: face/extra/formula
+			]
+		]
 		on-enter [
 			if formula? face/text [process face]
 			if all [
@@ -51,12 +57,6 @@ layout [
 			][
 				react/unlink face/extra/relation 'all
 				face/extra/relation: none
-			]
-		]
-		on-dbl-click [
-			if face/extra/formula [
-				face/extra/value: copy face/text
-				face/text: face/extra/formula
 			]
 		]
 ]

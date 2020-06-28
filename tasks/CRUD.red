@@ -17,8 +17,8 @@ model: deep-reactor [
 	view: is [collect [foreach entry data [keep format entry]]]
 ]
 
-; disable OS-specific 'Cancel' button layout
 system/view/VID/GUI-rules/active?: no
+
 view [
 	title "CRUD"
 	text "Filter prefix:"
@@ -52,8 +52,10 @@ view [
 	]
 	return
 	button "Create" [
-		if all [name/data surname/data][
-			append/only model/data model/construct copy name/text copy surname/text
+		unless any [empty? name/text empty? surname/text][
+			append/only model/data model/construct
+				copy name/text
+				copy surname/text
 		]
 	]
 	update: button "Update" [
@@ -63,7 +65,6 @@ view [
 			not empty? name/text [entry/name: copy name/text]
 			not empty? surname/text [entry/surname: copy surname/text]
 		]
-		; force MODEL/VIEW update
 		append model/data []
 	]
 	delete: button "Delete" [remove list/extra]
