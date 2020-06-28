@@ -1,0 +1,63 @@
+# About
+
+https://eugenkiss.github.io/7guis[7GUIs] benchmark tasks implemented in https://www.red-lang.org[Red] programming language.
+
+This project serves a fourfold purpose:
+
+. Fresh take on all the seven challenges, without peeking into existing solutions;
+. Baseline for comparison of Red's approach to GUI programming with other mainstream toolkits;
+. Evaluation of VID dialect and View engine, search for their potential improvements;
+. Testbed for GUI backends supported by View.
+
+Other known implementations:
+
+* https://github.com/greggirwin/7guis/tree/master/Red[Gregg Irwin].
+
+## Status
+
+All 7 challenges are completed and clock under 270 lines of code (bar script headers).
+
+The project was tested on all supported View backends with Red https://github.com/red/red/commit/fe2ad5264f7286b831583055a551d72aaa880d7b[`fe2ad52`]; the following issues were found:
+
+.Known issues.
+[cols="1,1,6"]
+|===
+| Backend | Task | Issue
+
+| macOS
+| link:tasks/timer.red[Timer]
+| Progress bar is not updated.
+
+| macOS
+| link:tasks/CRUD.red[CRUD]
+| Updating an entry causes a `none`-related error.
+
+| macOS
+| link:tasks/cells.red[Cells]
+| Spreadsheet cells are unresponsive.
+
+|  GTK
+| link:tasks/CRUD.red[CRUD]
+| Some critical assertions are failing inside the GTK library.
+
+|===
+
+## Structure
+
+link:/tasks/[Tasks]:: Solutions to 7GUIs challenges; files are named after a task they implement.
+link:review.adoc[Review]:: Case-study of the implemented tasks; follows Eugen Kiss' https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[thesis] methodology.
+
+# Setup
+
+. Clone project's repository.
+. Download the latest Red release from the https://www.red-lang.org/p/download.html[official website].
+. Having toolchain binary and this repository in place, check out the implemented tasks:
+    * with `red <filename>` in system shell;
+    * from the interpreter (`do %<filename>` or `File > Run...` in Red console);
+    * or via compilation for your platform of choice (see `red --help` for details).
+
+Alternatively, Red console and 7GUIs tasks can be built https://github.com/red/red#running-red-from-the-sources-for-contributors[from sources].
+
+# License
+
+The project is released under link:COPYING[3-clause BSD license].
