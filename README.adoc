@@ -24,11 +24,11 @@ The project was tested on all supported View backends with Red https://github.co
 |===
 | Backend | Task | Issue
 
-| macOS
+| Cocoa
 | link:tasks/timer.red[Timer]
 | Progress bar is not updated.
 
-| macOS
+| Cocoa
 | link:tasks/cells.red[Cells]
 | Spreadsheet cells are unresponsive.
 
