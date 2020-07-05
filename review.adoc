@@ -41,7 +41,7 @@ High level of expressiveness is made possible by the synergy of language propert
 
 > How closely does the notation correspond to the problem world?
 
-Historically, object-oriented programming (OOP) is a prevalent paradigm when it comes to GUI programming.footnote:[See introductory chapter in Eugen Kiss' thesis.] In Red, hierarchical composition of stateful objects reflects the underlying structure of modeled graphical interface; prototype-based inheritance ensures that all faces have same properties (such as position, size, visibility), yet each instance is unique in the way said properties are used and customized; object ownership system and reactivity make real-time user interaction possible.
+Historically, object-oriented programming (OOP) is a prevalent paradigm when it comes to GUI programmingfootnote:[See introductory chapter in Eugen Kiss' thesis.], the same holds with Red as well: hierarchical composition of stateful objects reflects the underlying structure of modeled graphical interface; prototype-based inheritance ensures that all faces have same properties (such as position, size, visibility), yet each instance is unique in the way said properties are used and customized; object ownership system and reactivity make real-time user interaction possible.
 
 Usage of actors and event-based model has a low conceptual overhead, since they rely on intuitive notions of causality and law of action-reaction.
 
