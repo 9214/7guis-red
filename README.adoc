@@ -15,7 +15,7 @@ Other known implementations:
 
 ## Status
 
-All 7 challenges are completed and clock under 270 lines of code (bar script headers).
+All 7 challenges are completed and clock under 270 lines of code, barring script headers.
 
 The project was tested on all supported View backends with Red https://github.com/red/red/commit/fe2ad5264f7286b831583055a551d72aaa880d7b[`fe2ad52`]; the following issues were found:
 
