@@ -19,6 +19,8 @@ A general overview of Red's GUI system in terms of CD is given so as to explain 
 
 > What are the minimum and maximum levels of abstraction exposed by the notation? Can details be encapsulated?
 
+NOTE: TBD trichotomy of HTML/CSS/JS: structure, style, substance.
+
 At the lowest level of abstraction GUI is represented as a virtual tree of reactive objects (faces); each such object holds an internal state relevant to a widget that it represents, and inherits its properties from a `face!` prototype.
 
 User interaction happens in an event-based fashion; changes in the underlying OS-specific widget are mapped onto object's state and trigger specified event handlers (actors), and changes in one of the object's properties (facets) are reflected back into widget.
@@ -41,11 +43,11 @@ High level of expressiveness is made possible by the synergy of language propert
 
 > How closely does the notation correspond to the problem world?
 
-Historically, object-oriented programming (OOP) is a prevalent paradigm when it comes to GUI programming,footnote:[See introductory chapter in Eugen Kiss' thesis.] the same holds with Red as well: hierarchical composition of stateful objects reflects the underlying structure of modeled graphical interface; prototype-based inheritance ensures that all faces have same properties (such as position, size, visibility), yet each instance is unique in the way said properties are used and customized; object ownership system and reactivity make real-time user interaction possible.
+Historically, object-oriented programming (OOP) is a prevalent paradigm when it comes to GUI construction,footnote:[See introductory chapter in Eugen Kiss' thesis.] the same holds with Red as well: hierarchical composition of stateful objects reflects the underlying structure of modeled graphical interface; prototype-based inheritance ensures that all faces have same properties (such as position, size, visibility), yet each instance is unique in the way said properties are used and customized; object ownership system and reactivity make real-time user interaction possible.
 
 Usage of actors and event-based model has a low conceptual overhead, since they rely on intuitive notions of causality and law of action-reaction. Each face is modeled as a receiver of events being pushed onto it, and although face object has a complete control on how events are processed and reacted upon, the flow of events itself is outside of its purview.
 
-This suffices for interface-building and programming in the small that View and VID are primarily designed for, but presents a challenging inversion of control for tasks of a larger scale, and those coming from different problem domains: where source of events produces more information than receiver can handle if they are forcefuly pushed onto it, thus clogging the throughput, such as real-time animation, asynchronous data processing, interaction with multiple network services.
+This suffices for interface-building and https://dl.acm.org/doi/10.1145/800027.808431[programming in the small] that View and VID are primarily designed for, but presents a challenging inversion of control for tasks of a larger scale, and those coming from different problem domains: where source of events produces more information than receiver can handle if they are forcefuly pushed onto it, thus clogging the throughput, such as real-time animation, asynchronous data processing, interaction with multiple network services.
 
 Again, historically, Functional Reactive Programming (FRP) is a paradigm that maps closely than OOP to this type of use-cases. Supporting FRP concepts in View presents an opportunity for Red to make a case for its paradigm-neutrality: port model coupled with embedded parsing engine and a rich set of datatypes provides a solid ground for creating an FRP-like Publish/Subscribe model based on pattern-matching event streams constructed from Red values.footnote:[A rudiment of this idea can be noticed in a reserved `system/view/event-port` field.]
 
@@ -57,7 +59,7 @@ When it comes to interface building, declarative VID specification tends to matc
 
 NOTE: TBD.
 
-Word's binding, shared series buffers, actor blocks as bodies of function with tacitly assumed arguments `face` and `event`, tacit assumption about the order of facet values in VID. Reactivity of facets. `pane` block and face's position in it, `parent`.
+Word's binding, shared series buffers, actor blocks as bodies of function with tacitly assumed arguments `face` and `event` (+ no way to localize words inside the bodies), tacit assumption about the order of facet values in VID. Reactivity of facets. `pane` block and face's position in it, `parent`.
 
 Explicit `on-*` handlers, global handlers. 
 
@@ -67,17 +69,27 @@ Explicit `on-*` handlers, global handlers.
 
 NOTE: TBD.
 
+No separate namespace (modules?) for View/VID (names of widgets, words in actors &c), modification w/o `copy`, no type-checking for face's fields (repurpose https://gitter.im/red/red?at=5f24151036563560f2b4cb06[this]), Secure dialect as a "bondage & discipline" for this general class of problems + ownership system. Constants, mutability. Indexing in Draw with relative offsets (Circles).
+
 #### Diffuseness
 
 > How many symbols or how much space does the notation require to produce a certain result or express a meaning?
 
 NOTE: TBD.
 
+Generally low level of diffuseness and boilerplate.
+
+Metaprogramming (e.g. generating cells). Static and dynamic ways of creating reactive relations (cite the docs?).
+
+Cells -- conditional expressions that guard the change of cell's state, FSM-like dialect. High degree of polymorphism, small set of actions working seamlessly across the board. Value literals can produces the meaning of their own (e.g. RGB `tuple!`, hex `issue!`) -- syntax determines semantics. 
+
 #### Viscosity
 
 > Are there any inherent barriers to change in the notation? How much effort is required to make a change to a program expressed in the notation?
 
 NOTE: TBD.
+
+Inherent dynamism of the language, hot code reloading, live editing (Eve clock demo). Very often the problem is not an excess of resistance to change, but the lack of it. Data-driven, configuration.
 
 ## Tasks
 
