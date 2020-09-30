@@ -46,7 +46,7 @@ link:review.adoc[Review]:: Case-study of the implemented tasks; follows Eugen Ki
 # Setup
 
 . Clone project's repository.
-. Download the **latest** Red release from the https://www.red-lang.org/p/download.html[official website].
+. Setup the Red toolchain by downloading automated build from the https://www.red-lang.org/p/download.html[official website].
 . Having toolchain binary and this repository in place, check out the implemented tasks:
     * with `red <filename>` from system shell;
     * from the interpreter (`do %<filename>` or `File > Run...` in Red console);
