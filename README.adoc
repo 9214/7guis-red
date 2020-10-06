@@ -4,8 +4,8 @@ https://eugenkiss.github.io/7guis[7GUIs] benchmark tasks implemented in https://
 
 This project serves a fourfold purpose:
 
-. Fresh take on all the seven challenges, without peeking into existing solutions;
-. Baseline for comparison of Red's approach to GUI programming with other mainstream toolkits;
+. A fresh take on all the seven challenges, without peeking into existing solutions;
+. A baseline for comparison of Red's approach to GUI programming with other mainstream toolkits;
 . Evaluation of VID dialect and View engine, search for their potential improvements;
 . Testbed for GUI backends supported by View.
 
@@ -49,7 +49,7 @@ link:/tasks/[Tasks]:: Solutions to 7GUIs challenges; files are named after a tas
 # Setup
 
 . Clone project's repository.
-. Setup the Red toolchain by downloading automated build from the https://www.red-lang.org/p/download.html[official website].
+. Setup the Red toolchain by downloading the automated build from the https://www.red-lang.org/p/download.html[official website].
 . Having toolchain binary and this repository in place, check out the implemented tasks:
     * with `red <filename>` from system shell;
     * from the interpreter (`do %<filename>` or `File > Run...` in Red console);
