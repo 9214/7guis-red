@@ -25,7 +25,7 @@ process: function [face /local match][
 	if face/extra/relation [react/unlink face/extra/relation 'all]
 	face/extra/relation: reduce [
 		to set-path! reduce [face/extra/name 'text]
-		'mold/only 'math/safe expression
+		'mold/only 'attempt reduce ['math expression]
 	]
 	expression: react face/extra/relation
 	react/unlink face/extra/relation face
