@@ -41,7 +41,6 @@ The project was tested on all supported View backends with Red https://github.co
 ## Structure
 
 link:/tasks/[Tasks]:: Solutions to 7GUIs challenges; files are named after a task they implement.
-link:review.adoc[Review]:: Case-study of the implemented tasks; follows Eugen Kiss' https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[thesis] methodology.
 
 # Setup
 
