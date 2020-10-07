@@ -7,23 +7,21 @@
 
 This writeup presents analysis of https://www.red-lang.org/[Red programming language]'s approach to Graphical User Interface (GUI) programming in the form of a case study. It concerns itself with https://eugenkiss.github.io/7guis/tasks[7GUIs tasks] implemented in Red, and was conceived as a research on potential improvements in its https://github.com/red/docs/blob/master/en/gui.adoc[GUI system]: cross-platform graphical engine (View), embedded Domain-Specific Language (eDSL) for declarative user interface specification (Visual Interface Dialect, VID) and, to a lesser extent, eDSL for drawing raster graphics (Draw).footnote:[Due to specificity of 7GUIs tasks Rich-Text Dialect (RTD) was not evaluated.]
 
-The study closely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] (CD) criteria.
+The study loosely follows the methodology outlined in https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[Eugen Kiss' thesis] that originally presented the idea of benchmarking GUI toolkits in terms of their notational qualities; said benchmark is based on implementing seven GUI-related challenges and evaluating solutions to them using a subset of https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations[Cognitive Dimensions of Notations] (CD) criteria.
 
 The implementation in question is hosted in https://github.com/9214/7guis-red[Github repository], along with the original version of this writeup.
 
 ### Overview
 
-A general overview of Red's GUI system in terms of CD is given so as to explain the basic principles and conceptual framework pertinent to the case study and all provided solutions; it can be skipped if the reader is familiar with the subject at hand.
+A general overview of Red's GUI system in terms of CD is given so as to explain the basic principles, terminology, and conceptual framework pertinent to the case study and all provided solutions; it can be skipped if the reader is familiar with the subject at hand.
 
 #### Abstraction level
 
 > What are the minimum and maximum levels of abstraction exposed by the notation? Can details be encapsulated?
 
-NOTE: TBD trichotomy of HTML/CSS/JS: structure, style, substance.
-
 At the lowest level of abstraction GUI is represented as a virtual tree of reactive objects (faces); each such object holds an internal state relevant to a widget that it represents, and inherits its properties from a `face!` prototype.
 
-User interaction happens in an event-based fashion; changes in the underlying OS-specific widget are mapped onto object's state and trigger specified event handlers (actors), and changes in one of the object's properties (facets) are reflected back into widget.
+User interaction happens in an event-based fashion, via a mechanism of https://github.com/red/docs/blob/master/en/view.adoc#two-way-binding[two-way binding]: changes in the underlying OS-specific widget are mapped onto object's state and trigger specified event handlers (actors), and changes in one of the object's properties (facets) are reflected back into widget.
 
 Communication between faces (or faces and domain model) is achieved with the help of object ownership system and https://github.com/red/docs/blob/master/en/reactivity.adoc[reactive framework] built on top of it; graphical component updates can be handled either automatically or with manual change propagation.
 
@@ -49,19 +47,60 @@ Usage of actors and event-based model has a low conceptual overhead, since they 
 
 This suffices for interface-building and https://dl.acm.org/doi/10.1145/800027.808431[programming in the small] that View and VID are primarily designed for, but presents a challenging inversion of control for tasks of a larger scale, and those coming from different problem domains: where source of events produces more information than receiver can handle if they are forcefuly pushed onto it, thus clogging the throughput, such as real-time animation, asynchronous data processing, interaction with multiple network services.
 
-Again, historically, Functional Reactive Programming (FRP) is a paradigm that maps closely than OOP to this type of use-cases. Supporting FRP concepts in View presents an opportunity for Red to make a case for its paradigm-neutrality: port model coupled with embedded parsing engine and a rich set of datatypes provides a solid ground for creating an FRP-like Publish/Subscribe model based on pattern-matching event streams constructed from Red values.footnote:[A rudiment of this idea can be noticed in a reserved `system/view/event-port` field.]
+Again, historically, Functional Reactive Programming (FRP) is a paradigm that maps closely than OOP to this type of use-cases. Supporting FRP concepts in View presents an opportunity for Red to make a case for its paradigm-neutrality: port model coupled with https://github.com/red/docs/blob/master/en/parse.adoc[embedded parsing engine] and a https://github.com/red/docs/blob/master/en/datatypes.adoc[rich set of datatypes] provides a solid ground for creating an FRP-like Publish/Subscribe model based on pattern-matching event streams constructed from Red values.footnote:[A rudiment of this idea can be noticed in a reserved `system/view/event-port` field.]
 
 When it comes to interface building, declarative VID specification tends to match the visual layout of widgets on the screen, and closely maps to a description that users themselves would provide when instantiating a GUI.footnote:[There exist an anecdotal https://lobste.rs/s/1kxz55/puny_gui_puppy_finder#c_nzxgog[evidence] of people understanding VID even without knowing Red.] And while VID covers static aspects of the GUI layout, support for dynamic features (such as adaptive resizing, flexboxes, spacers) is lacking. There exist user-made solutions for that,footnote:[See https://gitlab.com/hiiamboris/red-elastic-ui[Elastic UI] proof-of-concept.] but out-of-the-box, cross-platform support would be much preferrable and provide the lowest common denominator for use-cases that require adaptive layouts.
 
 #### Hidden dependencies
 
+WARNING: Looks too far-fetched; spread between error-proness (e.g. binding) and difuseness (e.g. VID vs. RebGUI).
+
 > Are dependencies between entities in the notation visible or hidden? Is every dependency indicated in both directions? Does a change in one area of the notation lead to unexpected consequences?
+
+If we consider VID as a notation, then the entities in it exist in two different forms: at the top level, these are layout positioning commands, style definitions, and face descriptions, which can be generalized under the term _specification_; at the lower level, it is the virtual tree of faces to which a set of specifications is compiled by a dialect processor (`layout` or `view`).
+
+As such, dependencies can exist between entities on either level of abstraction:
+
+- between the elements of specifications;
+- between the faces in a virtual tree, or between their facets.
+
+Within a VID block, specifications are well-isolated between each other and follow a pre-defined format: container settings at the top, followed by style declarations and face-specific specs. However, a minor dependency lurking in there is the _positioning_ of facet values and options, as well as the placement of specifications relative to each other that influences the interface layout, unless the keywords that specify an absolute positioning are used.
+
+To illustrate the point: inside a given VID specification, both background and foreground colors are denoted either by `tuple!` values (representing RGBA colors), by `issue!` values (representing colors in hex notation), or by words that are set to such values. When values of these types are placed in the specification, value at the lower series index corresponds to the background, and value at the higher series index relates to the foreground, regardless of the programmer's intention.
+
+By extension, when one specification follows another, its associated widget is placed either below or to the right of its predecessor, according to the current layout mode. This relation of succession is imposed by the linearity of the notation, which is position-dependent. This dependency, however, is visible and is an intentional part of dialect's design.
+
+The content of specification, rather than its relative positioning, can also implicitly infuence widget's properties. For example, `slider` or `progress` faces can become either vertical or horizontal, depending on which of its dimensions, denoted by a `pair!` value, is larger; on Win32 backend, size of the `calendar` widget changes the style of its display.
+
+Any given specification includes information about widget's positioning, the content of its facets, and provided event handlers. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_, which in VID tend to be conflated at the level of description. On the one hand, this leads to a more compact and human-friendly code; together with View engine's automatic handling of many GUI aspects, this constitutes an integral part of VID's appeal. On the other hand, such absence of modularity makes position-dependency of notational elements even more apparent.footnote:[Taking a certain ontological stance, one can name these aspects _essences_ that, when combined, form the notational entities.] In turn, the excess of hand-holding prevents any sort of fine-grained control over the user interface.
+
+On the other side of the spectrum, virtual tree of faces clearly separates the outlined aspets and is more granular, at the expence of being less expressive (in terms of notational qualities) than a VID block. A middle ground would be a new kind of dialect, designed with ease of code generation in mind (e.g. for high-level compilers that would target this dialect), where description of each aspect is notationally rich, reactive, and non-hierarchical, yet exists independently from all the others.footnote:[Henrik Mikael Kristensen https://gitter.im/red/red?at=5f749a589331433de02abdd6[discusses] a similar tripartite and layered approach in the design of a Draw-based dialect. Rudiments of such modularity are also present in http://www.dobeash.com/rebgui.html[RebGUI] system built on top of Rebol/View.]
+
+If we take face as a notational entity, then hierarchical dependencies between faces are cleary indicated in the virtual tree of faces: `pane` facet contains a list of child faces arranged in a Z-order, and `parent` facet of a child face holds a backlink to its parent face.
+
+Dependencies on reactive sources to which a given face can react during event processing can be discerned from `actors` facet. In turn, `react?` function can be used on a specific facet to see in what relation it acts as a source. Yet, long-range dependencies remain invisible. Event handlers are specified explicitly and are also visible in `actors` facet; but handlers can also be installed globally, in such case they become a hidden dependency.
+
+Objects in Red act more like namespaces, and so there is no dependency or inheritance chain between a given object and a prototype from which it was derived. This nips the https://en.wikipedia.org/wiki/Fragile_base_class[fragile base class] problem (given as a classical example of hidden dependency in 7GUIs thesis) in the bud.
+
+One notable feature is auto-synchronization kept by View engine between `data` and `text` facets in `text` and `field` faces. Done for the sake of convenience, it nevertheless is not explicitly indicated in VID specification or face state, and therefore forms a hidden dependency.
+
+Arguably, the most problematic hidden dependency present in Red GUI system is it's reliance on language's name resolution mechanism called "binding" or sometimes "definitional scoping" coupled with an absence of modules or easy ways to localize names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an event handler) by default resolve to the global namespace, and often tend to shadow other definitions, which sometimes leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during implementation of the link:tasks/CRUD.red[CRUD] task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
+
+Conceptually, hidden dependency is a broken symmetry that acts as an inhibitor of the finding process: once a change to the notational entity is made, consequences of such change, if not already apparent from the outset, need to be deduced by following the one-way causal relationships with other entities, which might not even be indicated at all.
+
+Environmental clues, such as up-to-date and readily-available reference documentation, as well as Integrated Development Environment (IDE), provide a compensatory function for such search costs, to a certain extent.
 
 NOTE: TBD.
 
-Word's binding, shared series buffers, actor blocks as bodies of function with tacitly assumed arguments `face` and `event` (+ no way to localize words inside the bodies), tacit assumption about the order of facet values in VID. Reactivity of facets. `pane` block and face's position in it, `parent`.
+Documentation -> compensatory function for a search cost of a hidden dependency, w/o sacrificing VID's notational qualities (tersness, implicitness, directness and semantic density). Hidden dependency is one-way and local; it is a slowing down of information search. Are tolerable during creation, but not modification, esp. for programming in the large.
 
-Explicit `on-*` handlers, global handlers. 
+Hidden dependencies are delegated to reference documentation which the user is assumed to consult. But there's no embedded, interactive documentation for VID (or any other dialect), nor a "bird's eye overview" indication of dependencies. An unsolved problem in genral for eDSLs in Red. IDE, tooltips. Link to some experiments and PoC from e.g. @toomasv.
+
+In a certrain sense, knowledge of behavior and various subleties is a hidden dependency of a programmer on reference docs. Cognitive overhead of learning DSLs. Terseness, implicitness, elegance and tacicity are notational qualities, which might become a stumbling block for beginners. OTOH, too much explicity and it becomes a burden in general cases. Data-oriented -> values encode semantics.
+
+(In)expectancy in Red (and, by extension, VID) are almost always tied to (in)experience.
+
+Backlink from face to VID spec that it was generated from (if any), e.g. an index into a VID block, which can also be reactive. Bx, lenses (why tho?).
 
 #### Error-proneness
 
@@ -69,7 +108,13 @@ Explicit `on-*` handlers, global handlers.
 
 NOTE: TBD.
 
-No separate namespace (modules?) for View/VID (names of widgets, words in actors &c), modification w/o `copy`, no type-checking for face's fields (repurpose https://gitter.im/red/red?at=5f24151036563560f2b4cb06[this]), Secure dialect as a "bondage & discipline" for this general class of problems + ownership system. Constants, mutability. Indexing in Draw with relative offsets (Circles).
+Facets, when being set, react differently depending on the type of the value: there's a list of accepted datatypes to which it can react, but it's not indicated anywhere other than documentation; e.g. `color` facet accepts `tuple!` but not a hex-encoded `issue!` (on the contrary, VID block accepts both types of values as encodings of colors). Data-oriented, minimal API, virtual tree of faces as a programming interface -- needs "protocoling".
+
+modification w/o `copy` (shared series buffers), no type-checking for face's fields (repurpose https://gitter.im/red/red?at=5f24151036563560f2b4cb06[this]), Secure dialect as a "bondage & discipline" for this general class of problems + ownership system. Constants, mutability. Indexing in Draw with relative offsets (Circles).
+
+Forgetting that VID is a DSL, trying to embed regular Red code.
+
+The question of GUI testing: manual, automatic, link to Boris' work. Existence of a null backend.
 
 #### Diffuseness
 
@@ -77,7 +122,7 @@ No separate namespace (modules?) for View/VID (names of widgets, words in actors
 
 NOTE: TBD.
 
-Generally low level of diffuseness and boilerplate.
+Generally low level of diffuseness and boilerplate. 270 LOC without intentional code-golfing. Take time to compare with other notable implementations (e.g. Eugiene's, or popular GUI frameworks like Qt or WxWidget).
 
 Metaprogramming (e.g. generating cells). Static and dynamic ways of creating reactive relations (cite the docs?).
 
@@ -97,7 +142,7 @@ NOTE: TBD.
 
 https://eugenkiss.github.io/7guis/tasks
 
-https://eugenkiss.github.io/7guis-React-TypeScript-MobX/
+https://eugenkiss.github.io/7guis-React-TypeScript-MobX[Reference implementation] created with React, TypeScript and MobX.
 
 Reference, rationale behind each task, samples.
 
@@ -253,7 +298,7 @@ NOTE: TBD.
 
 WARNING: Most of this is a copypaste from other sections.
 
-NOTE: See also 'Ideas' folder on Notion.
+NOTE: See also 'Ideas' folder on Notion. Table with TL;DR of an idea -> section number.
 
 Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code. Customization of the basic set of widgets is possible to a certain extent, but is ultimately limited due to specificities of underlying backends.
 
@@ -272,6 +317,10 @@ Again, historically, Functional Reactive Programming (FRP) is a paradigm that ma
 ---
 
 When it comes to interface building, declarative VID specification tends to match the visual layout of widgets on the screen, and closely maps to a description that users themselves would provide when instantiating a GUI. And while VID covers static aspects of the GUI layout, support for dynamic features (such as adaptive resizing, flexboxes, spacers) is lacking. There exist user-made solutions for that, but out-of-the-box, cross-platform support would be much preferrable and provide a lowest common denominator for use-cases that require adaptive layouts.
+
+---
+
+Accessibility, localization (cf. RebGUI)
 
 ---
 
