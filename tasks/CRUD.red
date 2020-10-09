@@ -67,6 +67,7 @@ view [
 			]
 		]
 	]
-	delete: button "Delete" [remove list/extra]
-	react [update/enabled?: delete/enabled?: make logic! list/selected]
+	delete: button "Delete" [remove list/extra] react [
+		update/enabled?: delete/enabled?: make logic! list/selected
+	]
 ]
