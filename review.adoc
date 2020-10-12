@@ -102,11 +102,115 @@ Finally, errors can emerge during the user interaction with a created GUI: an un
 
 NOTE: TBD.
 
-Generally low level of diffuseness and boilerplate. 270 LOC without intentional code-golfing. Take time to compare with other notable implementations (e.g. Eugiene's, or popular GUI frameworks like Qt or WxWidget).
+To the best of author's knowledge,footnote:[Reviewing the official 7GUIs repository at commit https://github.com/eugenkiss/7guis/commit/dd339c88b7302e221340c8ee2335ce6124a88c54[`dd339c8`] and considering its pending pull requests.] only the implementations of 7GUIs tasks listed in the table below have completed all the seven challenges. Source lines of code (SLOC) metric of implementation files amd their dependencies was taken as displayed by Github code viewer.
+
+.SLOC count of complete 7GUIs implementations.
+[%header,cols="<3,^,^,^,^,^,^,^,>"]
+|===
+
+| 
+| Counter
+| Temperature Converter
+| Flight Booker
+| Timer
+| CRUD
+| Circle Drawer
+| Cells
+| Total
+
+| https://github.com/9214/7guis-red[Red]
+| 12
+| 18
+| 39
+| 19
+| 70
+| 72
+| 87
+| *317*
+
+| https://github.com/area9innovation/flow9/tree/master/demos/7guis[Flow]
+| 10
+| 24
+| 78
+| 30
+| 56
+| 129
+| 298
+| *625*
+
+| https://github.com/themoritz/7guis-reflex[Haskell, Reflex-DOM framework]
+| 13
+| 14
+| 44
+| 30
+| 65
+| 106
+| 315
+| *674* ^1^
+
+| https://github.com/foam-framework/foam/tree/master/js/foam/demos/sevenguis[JavaScript, FOAM framework]
+| 22
+| 33
+| 103
+| 99
+| 142
+| 148
+| 301
+| *848*
+
+| https://github.com/petelomax/Phix/tree/master/demo/rosetta/7guis[Phix]
+| 18
+| 33
+| 64
+| 65
+| 143
+| 204
+| 424
+| *1041*
+
+| https://github.com/andrewgreenh/7guis[JavaScript, React]
+| 26
+| 80
+| 100
+| 85
+| 248
+| 234
+| 641
+| *1575* ^2^
+
+| Name
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| *0*
+
+|===
+
+[small]
+. 87 SLOC of extra helper libraries.
+. 161 SLOC of extra helper libraries.
+
+---
+
+- https://github.com/FLUXparticle/7guis
+
+- https://github.com/eugenkiss/7guis-Clojure-Seesaw
+- https://github.com/eugenkiss/7guis-Java7-Swing
+- https://github.com/eugenkiss/7guis-Java8-JavaFX
+- https://github.com/eugenkiss/7guis-React-TypeScript-MobX
+- https://github.com/eugenkiss/7guis-Scala-ScalaFX
+
+Red implementation is the smallest fully functional implementation in terms of the total SLOC count, even with the leg-up of ignoring library imports and not checking the implemented functionality (in the other implementations), and (in Red impl.) counting non-essential script headers, taking the helping code into consideration (e.g. undo/redo functionality in Circle Drawer, formula parser and evaluator in Cells) and a bit excessive code formatting (link to the official style guidelines, adhering to them) without intentional code-golfing.
+
+Generally low level of diffuseness and boilerplate.
 
 Metaprogramming (e.g. generating cells). Static and dynamic ways of creating reactive relations (cite the docs?).
 
-Cells -- conditional expressions that guard the change of cell's state, FSM-like dialect. High degree of polymorphism, small set of actions working seamlessly across the board. Value literals can produces the meaning of their own (e.g. RGB `tuple!`, hex `issue!`) -- syntax determines semantics. 
+Cells -- conditional expressions that guard the change of cell's state, FSM-like dialect. High degree of polymorphism, small set of actions working seamlessly across the board. Value literals can produce (express) the meaning of their own (e.g. RGB `tuple!`, hex `issue!`) -- syntax determines semantics. 
 
 #### Viscosity
 
