@@ -78,25 +78,29 @@ Conceptually, hidden dependency is a broken symmetry that acts as an inhibitor o
 
 Environmental clues, such as embedded docstrings and integrated help system, as well as Integrated Development Environment (IDE) facilities, provide a compensatory function for such search costs, to a certain extent. This is the general line of development that Red and its eDSLs seem to pursue even in their nascent state: aiming at living environments rather than static artefacts, favoring interactive tools over supplemental tutorials.
 
-Compact and human-friendly code constitutes an integral part of VID's appeal; overloading it with an explicit information and mandatory constructs would indicate hidden dependencies more clearly, at the expence of becoming extremely scrupulous and sacrificing dialect's notational qualities, such as expressive directness and semantic density.
+Compact and human-friendly code constitutes an integral part of VID's appeal; overloading it with an explicit information and mandatory constructs would indicate hidden dependencies more clearly, at the expence of becoming extremely scrupulous and sacrificing dialect's notational qualities, such as expressiveness and brewity.
 
 #### Error-proneness
 
 > To what extent does the notation influence the likelihood of the user making a mistake?
 
+The nature of VID as an eDSL is a double edged sword: it is a language with a well-defined problem domain and semantics, which nethertheless is embedded in the host, and relies on the behavior of its datatypes with evaluation model. Such "chimerical" nature of Red dialects provides the necessary leverage and reduces the complexity of a given task, but is often tends to be misunderstood: either by ignoring dialect's specificities or by forgetting its relation to the base language.
+
+Arguably, one the most problematic aspect of Red GUI system is it's reliance on language's name resolution mechanism called "binding" or sometimes "definitional scoping", coupled with an absence of modules or easy ways to localize or re-bind names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an event handler) by default resolve to the global namespace, and often tend to shadow other definitions, which leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during the implementation of link:tasks/CRUD.red[CRUD] task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
+
+Another error-prone element is the structure of indirect values in Red -- that is, values that contain references to external, mutable and shareable data buffers. Modification of a buffer via one indirect value affects all the other indirect values that share the same buffer, unless said buffer is explicitly copied beforehand. While Red employs only call-by-value convention, to the uninitiated this language feature comes close to Java’s different calling semantics for primitive and reference types. In the context of View and VID, this comes up when facets (most commonly `data` or `text`) are re-used in many complex relations, or when a VID block containing indirect values (such as `string!` or `block!`) is generated with the help of meta-programming facilities.
+
+View engine presents virtual tree of faces as a data-oriented, minimal programming interface to the underlying graphical backend. The source of errors in it are not the hierarchical and reactive relations between faces,footnote:[The opposite happens in the rare cases where a tree of faces is constructed by hand and various hierarchical requirements (e.g. `screen` face as tree's root, double-linking of faces, specification of their types and event handlers) need to be fulfilled.] but the variability of facet's values. Objects' fields are not typed, in a sense that they can be set to any value, which in turn brings out a specific behavior dictated by its datatype. For example, in `color` facet, `tuple!` values change widget's background color, and `none!` value resets it to a default setting.
+
+Given that VID recognizes both `tuple!` (RGBA) and `issue!` (hex-encoded) values as valid color denotations, a common mistake is to set `color` facet to `issue!` and expect a change in the background, whereas this setting is simply ignored.
+
 NOTE: TBD.
 
-Facets, when being set, react differently depending on the type of the value: there's a list of accepted datatypes to which it can react, but it's not indicated anywhere other than documentation; e.g. `color` facet accepts `tuple!` but not a hex-encoded `issue!` (on the contrary, VID block accepts both types of values as encodings of colors). Data-oriented, minimal API, virtual tree of faces as a programming interface -- needs "protocoling".
+Operational specification, protocoling (repurpose https://gitter.im/red/red?at=5f24151036563560f2b4cb06[this]), constraints (such as immutability).
 
-modification w/o `copy` (shared series buffers), no type-checking for face's fields (repurpose https://gitter.im/red/red?at=5f24151036563560f2b4cb06[this]), Secure dialect as a "bondage & discipline" for this general class of problems + ownership system. Constants, mutability. Indexing in Draw with relative offsets (Circles).
+Secure dialect as a "bondage & discipline" for this general class of problems + ownership system.
 
-Forgetting that VID is a DSL, trying to embed regular Red code.
-
-The question of GUI testing: manual, automatic, link to Boris' work. Existence of a null backend.
-
-Arguably, the most problematic hidden dependency present in Red GUI system is it's reliance on language's name resolution mechanism called "binding" or sometimes "definitional scoping" coupled with an absence of modules or easy ways to localize names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an event handler) by default resolve to the global namespace, and often tend to shadow other definitions, which sometimes leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during implementation of the link:tasks/CRUD.red[CRUD] task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
-
-One notable feature is auto-synchronization kept by View engine between `data` and `text` facets in `text` and `field` faces. Done for the sake of convenience, it nevertheless is not explicitly indicated in VID specification or face state, and therefore forms a hidden dependency.
+The question of GUI testing: manual, automatic, generative, Clojure spec, link to Boris' https://gitlab.com/hiiamboris/red-view-test-system[Red/View testing framework]. Existence of the https://www.red-lang.org/2017/07/063-macos-gui-backend.html[null backend] (at the beginning of "View engine" section).
 
 #### Diffuseness
 
