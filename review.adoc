@@ -100,12 +100,10 @@ Finally, errors can emerge during the user interaction with a created GUI: an un
 
 > How many symbols or how much space does the notation require to produce a certain result or express a meaning?
 
-NOTE: TBD.
-
-To the best of author's knowledge,footnote:[Reviewing the official 7GUIs repository at commit https://github.com/eugenkiss/7guis/commit/dd339c88b7302e221340c8ee2335ce6124a88c54[`dd339c8`] and considering its pending pull requests.] only the implementations of 7GUIs tasks listed in the table below have completed all the seven challenges. Source lines of code (SLOC) metric of implementation files amd their dependencies was taken as displayed by Github code viewer.
+To the best of author's knowledge,footnote:[Reviewing the official 7GUIs repository at commit https://github.com/eugenkiss/7guis/commit/dd339c88b7302e221340c8ee2335ce6124a88c54[`dd339c8`] and considering its pending pull requests.] only the implementations of 7GUIs tasks listed in the table below have completed all the seven challenges -- which is taken as a sign of GUI toolkit's capabilities. Source lines of code (SLOC) metrics of implementation files and their dependencies were taken as displayed by Github code viewer, and serve as an approximation of diffuseness' degree.
 
 .SLOC count of complete 7GUIs implementations.
-[%header,cols="<3,^,^,^,^,^,^,^,>"]
+[%header,cols="<2,^,^,^,^,^,^,^,>"]
 |===
 
 | 
@@ -128,6 +126,26 @@ To the best of author's knowledge,footnote:[Reviewing the official 7GUIs reposit
 | 87
 | *317*
 
+| https://github.com/eugenkiss/7guis-Clojure-Seesaw[Clojure, Seesaw]
+| 14
+| 35
+| 76
+| 43
+| 77
+| 90
+| 140
+| *485* ^†^
+
+| https://github.com/eugenkiss/7guis-Scala-ScalaFX[Scala, ScalaFX]
+| 29
+| 36
+| 57
+| 50
+| 87
+| 128
+| 219
+| *606*
+
 | https://github.com/area9innovation/flow9/tree/master/demos/7guis[Flow]
 | 10
 | 24
@@ -138,7 +156,7 @@ To the best of author's knowledge,footnote:[Reviewing the official 7GUIs reposit
 | 298
 | *625*
 
-| https://github.com/themoritz/7guis-reflex[Haskell, Reflex-DOM framework]
+| https://github.com/themoritz/7guis-reflex[Haskell, Reflex-DOM]
 | 13
 | 14
 | 44
@@ -146,9 +164,9 @@ To the best of author's knowledge,footnote:[Reviewing the official 7GUIs reposit
 | 65
 | 106
 | 315
-| *674* ^1^
+| *674* ^†^
 
-| https://github.com/foam-framework/foam/tree/master/js/foam/demos/sevenguis[JavaScript, FOAM framework]
+| https://github.com/foam-framework/foam/tree/master/js/foam/demos/sevenguis[JavaScript, FOAM]
 | 22
 | 33
 | 103
@@ -157,6 +175,16 @@ To the best of author's knowledge,footnote:[Reviewing the official 7GUIs reposit
 | 148
 | 301
 | *848*
+
+| https://github.com/eugenkiss/7guis-Java8-JavaFX[Java 8, JavaFX]
+| 26
+| 57
+| 71
+| 52
+| 83
+| 224
+| 468
+| *981*
 
 | https://github.com/petelomax/Phix/tree/master/demo/rosetta/7guis[Phix]
 | 18
@@ -168,6 +196,16 @@ To the best of author's knowledge,footnote:[Reviewing the official 7GUIs reposit
 | 424
 | *1041*
 
+| https://github.com/eugenkiss/7guis-Java7-Swing[Java 7, Swing]
+| 38
+| 78
+| 143
+| 88
+| 213
+| 233
+| 468
+| *1261*
+
 | https://github.com/andrewgreenh/7guis[JavaScript, React]
 | 26
 | 80
@@ -176,41 +214,31 @@ To the best of author's knowledge,footnote:[Reviewing the official 7GUIs reposit
 | 248
 | 234
 | 641
-| *1575* ^2^
+| *1575* ^†^
 
-| Name
-| 0
-| 0
-| 0
-| 0
-| 0
-| 0
-| 0
-| *0*
+| https://github.com/eugenkiss/7guis-React-TypeScript-MobX[TypeScript, React, MobX]
+| 15
+| 106
+| 105
+| 96
+| 105
+| 391
+| 481
+| *1585* ^†^
 
 |===
 
-[small]
-. 87 SLOC of extra helper libraries.
-. 161 SLOC of extra helper libraries.
+[small.text-right]
+Clojure, Seesaw:: 10 SLOC of external scaffolding.
+Haskell, Reflex-DOM:: 87 SLOC of helper libraries.
+JavaScript, React:: 161 SLOC of helper libraries.
+TypeScript, React, MobX:: 279 SLOC of external scaffolding, 7 SLOC of helpers.
 
----
+It follows that the Red implementation under discussion is the smallest fully functional one in terms of the total SLOC count, even with the leg-up of counting non-essential script headers containing meta-information (7 SLOC per task), taking the helping code under consideration (e.g. undo/redo functionality in <<_circle_drawer, Circle Drawer>>, formula parser and evaluator in <<_cells, Cells>>), and a bit excessive code formatting -- a by-product of adherance to the https://github.com/red/docs/blob/master/en/style-guide.adoc[official style guide] and avoidance of intentional code-golfing.
 
-- https://github.com/FLUXparticle/7guis
+Indeed, Red programs generally show low levels of diffuseness and boilerplate, without extreme density (cf. APL family). Speaking of VID, not only the line count in it is low, but the number of distinct notational elements (at the level of symbolic description) is also quite modest: any given VID specification includes information about widget's positioning, the content of its facets, and provided event handlers. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_.footnote:[Taking a certain ontological stance, one can name these aspects _essences_ that, when combined, form the notational entities.]
 
-- https://github.com/eugenkiss/7guis-Clojure-Seesaw
-- https://github.com/eugenkiss/7guis-Java7-Swing
-- https://github.com/eugenkiss/7guis-Java8-JavaFX
-- https://github.com/eugenkiss/7guis-React-TypeScript-MobX
-- https://github.com/eugenkiss/7guis-Scala-ScalaFX
-
-Red implementation is the smallest fully functional implementation in terms of the total SLOC count, even with the leg-up of ignoring library imports and not checking the implemented functionality (in the other implementations), and (in Red impl.) counting non-essential script headers, taking the helping code into consideration (e.g. undo/redo functionality in Circle Drawer, formula parser and evaluator in Cells) and a bit excessive code formatting (link to the official style guidelines, adhering to them) without intentional code-golfing.
-
-Generally low level of diffuseness and boilerplate.
-
-Metaprogramming (e.g. generating cells). Static and dynamic ways of creating reactive relations (cite the docs?).
-
-Cells -- conditional expressions that guard the change of cell's state, FSM-like dialect. High degree of polymorphism, small set of actions working seamlessly across the board. Value literals can produce (express) the meaning of their own (e.g. RGB `tuple!`, hex `issue!`) -- syntax determines semantics. 
+The main factors contributing to near-absence of diffuseness are meta-programming facilities (e.g. generating spreadsheet in <<_cells, Cells>>) and data-orientation copuled with high degree of polymorphism: a small set of core primities working seamlessly across the board, and acting on value literals that can produce the meaning of their own; syntax determines semantics.
 
 #### Viscosity
 
@@ -350,7 +378,7 @@ NOTE: TBD.
 
 ---
 
-Persistent data structures. Mention https://gist.github.com/numberjay/3df8f13044145c6dde1918ea2cdfe3b8[PoC]?.
+Persistent data structures. Mention https://gist.github.com/numberjay/3df8f13044145c6dde1918ea2cdfe3b8[PoC]?. On-disk serialization with https://github.com/red/docs/blob/master/en/redbin.adoc[Redbin] format.
 
 ### Cells
 
@@ -410,9 +438,13 @@ Accessibility, localization (cf. RebGUI)
 
 The content of specification, rather than its relative positioning, can also implicitly infuence widget's properties. For example, `slider` or `progress` faces can become either vertical or horizontal, depending on which of its dimensions, denoted by a `pair!` value, is larger; on Win32 backend, size of the `calendar` widget changes the style of its display.
 
-Any given specification includes information about widget's positioning, the content of its facets, and provided event handlers. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_, which in VID tend to be conflated at the level of description. On the one hand, this leads to a more compact and human-friendly code; together with View engine's automatic handling of many GUI aspects, this constitutes an integral part of VID's appeal. On the other hand, such absence of modularity makes position-dependency of notational elements even more apparent.footnote:[Taking a certain ontological stance, one can name these aspects _essences_ that, when combined, form the notational entities.] In turn, the excess of hand-holding prevents any sort of fine-grained control over the user interface.
+Any given specification includes information about widget's positioning, the content of its facets, and provided event handlers. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_, which in VID tend to be conflated at the level of description. On the one hand, this leads to a more compact and human-friendly code; together with View engine's automatic handling of many GUI aspects, this constitutes an integral part of VID's appeal. On the other hand, such absence of modularity makes position-dependency of notational elements even more apparent.
 
 On the other side of the spectrum, virtual tree of faces clearly separates the outlined aspets and is more granular, at the expence of being less expressive (in terms of notational qualities) than a VID block. A middle ground would be a new kind of dialect, designed with ease of code generation in mind (e.g. for high-level compilers that would target this dialect), where description of each aspect is notationally rich, reactive, and non-hierarchical, yet exists independently from all the others.footnote:[Henrik Mikael Kristensen https://gitter.im/red/red?at=5f749a589331433de02abdd6[discusses] a similar tripartite and layered approach in the design of a Draw-based dialect. Rudiments of such modularity are also present in http://www.dobeash.com/rebgui.html[RebGUI] system built on top of Rebol/View.]
+
+---
+
+Lack of meaningful complexity metrics for non-mainstream languages. Most of the work in this area was done at the early stages of CS&SE field.
 
 ---
 
