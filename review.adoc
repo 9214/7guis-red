@@ -35,7 +35,7 @@ In general, GUI applications made with Red are written at the high level of abst
 
 Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code.footnote:[See Boleslav Březovský's http://red.qyz.cz/writing-style.html[article] on custom VID styles as an example.] Customization of the basic set of widgets is possible to a certain extent, but is ultimately limited due to specificities of the underlying backends.
 
-High level of expressiveness is made possible by the synergy of language properties, such as homoiconicity, high degree of polymorphism, syntactically-rich type system and general orientation towards linguistic abstraction and simple semantics of all operations; indeed, both VID and View are the prime examples of this approach towards language design.
+High level of expressiveness is made possible by the synergy of language properties, such syntactically-rich type system and general orientation towards linguistic abstraction and simple semantics of all operations; indeed, both VID and View are the prime examples of this approach towards language design.
 
 #### Closeness of mapping
 
@@ -100,7 +100,7 @@ Finally, errors can emerge during the user interaction with a created GUI: an un
 
 > How many symbols or how much space does the notation require to produce a certain result or express a meaning?
 
-To the best of author's knowledge,footnote:[Reviewing the official 7GUIs repository at commit https://github.com/eugenkiss/7guis/commit/dd339c88b7302e221340c8ee2335ce6124a88c54[`dd339c8`] and considering its pending pull requests.] only the implementations of 7GUIs tasks listed in the table below have completed all the seven challenges -- which is taken as a sign of GUI toolkit's capabilities. Source lines of code (SLOC) metrics of implementation files and their dependencies were taken as displayed by Github code viewer, and serve as an approximation of diffuseness' degree.
+To the best of author's knowledge,footnote:[Reviewing the official 7GUIs repository at commit https://github.com/eugenkiss/7guis/commit/dd339c88b7302e221340c8ee2335ce6124a88c54[`dd339c8`] and considering its pending pull requests.] only the https://eugenkiss.github.io/7guis/implementations[implementations] of 7GUIs tasks listed in the table below have completed all the https://eugenkiss.github.io/7guis/tasks[seven challenges] -- which is taken as a sign of GUI toolkit's capabilities. Source lines of code (SLOC) metrics of implementation files and their dependencies were taken as displayed by Github code viewer, and serve as an approximation of diffuseness' degree.
 
 .SLOC count of complete 7GUIs implementations.
 [%header,cols="<2,^,^,^,^,^,^,^,>"]
@@ -238,15 +238,40 @@ It follows that the Red implementation under discussion is the smallest fully fu
 
 Indeed, Red programs generally show low levels of diffuseness and boilerplate, without extreme density (cf. APL family). Speaking of VID, not only the line count in it is low, but the number of distinct notational elements (at the level of symbolic description) is also quite modest: any given VID specification includes information about widget's positioning, the content of its facets, and provided event handlers. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_.footnote:[Taking a certain ontological stance, one can name these aspects _essences_ that, when combined, form the notational entities.]
 
-The main factors contributing to near-absence of diffuseness are meta-programming facilities (e.g. generating spreadsheet in <<_cells, Cells>>) and data-orientation copuled with high degree of polymorphism: a small set of core primities working seamlessly across the board, and acting on value literals that can produce the meaning of their own; syntax determines semantics.
+The main factors contributing to near-absence of diffuseness are meta-programming facilities (e.g. generating spreadsheet in <<_cells, Cells>>) and high degree of polymorphism: a small set of core primitives working seamlessly across the board, and acting on value literals that can produce the meaning of their own; syntax determines semantics.
 
 #### Viscosity
 
 > Are there any inherent barriers to change in the notation? How much effort is required to make a change to a program expressed in the notation?
 
+Inherent dynamism and flexibility (and hense a low viscosity) of the Rebol family of languages always made it an appealing target for rapid code prototyping, as evidenced by a multitude of hot code reloading and live editing tools developed with it.footnote:[See https://www.red-lang.org/2016/07/eve-style-clock-demo-in-red-livecoded.html[Eve clock demo] and https://github.com/toomasv/layout-editor[UI mockup editor] as examples.] 3 factors play role in that:
+
+Homoiconic property:: By the virtue of which Red is not only a programming language, but also its own data format. That encourages keeping the programs data-driven, decoupled form frequently changing aspects that get factored out into dedicated textual configuration files and can be serialized into binary form if needed.
+High degree of polymorphism:: Changing the datatype without changing the underlying interface (for example by switching between different types of `series!`) often requires little to no changes within the rest of the program.
+Object ownership model:: blah, so-called https://en.wikipedia.org/wiki/Autonomic_computing#Characteristics_of_autonomic_systems[self-* properties]; reactive framework built on top of it is what actually drives the responsiveness of the View engine. 
+
+
 NOTE: TBD.
 
-Inherent dynamism of the language, hot code reloading, live editing (Eve clock demo). Very often the problem is not an excess of resistance to change, but the lack of it. Data-driven, configuration.
+Something more specific to VID? Brag about 3S as a separation of configuration options (use-cases?), which of them exibit which degree of viscosity, at what stages of development (development, prototyping, mainteance)? Progression from less to more viscious over the course of the system growth, towards more constraints and baked-in assumptions.
+
+No deps., plug-and-play, single 1MB binary, little to no dependencies (only temporal during bootstrapping phase)
+
+Low level of viscosity is made possible by the synergy of language properties, such as homoiconicity, high degree of polymorphism, syntactically-rich type system and general orientation towards linguistic abstraction and simple semantics of all operations; indeed, both VID and View are the prime examples of this approach towards language design.
+
+Very often the problem is not an excess of resistance to change, but the lack of it. Data-driven, configuration.
+
+The whole reactive paradigm: just write the ownership code, the changes will be applied themselves, automagially.
+
+Working on specification of each face separately, but not as a group? E.g. what if I want to move all the widgets up by X -- then you just adjust the origin. What if I want to introduce new element into relation (e.g. bx transform as in temperature converter) -- that would require introducing a mediating reactor from the get-go instead of interlinking every face with every other one.
+
+View engine helps, but at time you need to go against the grain (e.g. auto-layout engine interfering with buttons in CRUD).
+
+Automated vs. deferred updating (contrast with Rebol?).
+
+Intentional viscosity: if it's hard to do then it's probably a wrong/unidiomatic solution (e.g. constructing virtual tree of faces by hand).
+
+low viscocity, then ported to a target language with high viscosity, more rigid. NoCode, LowCode.
 
 ## Tasks
 
