@@ -1,4 +1,9 @@
-# About
+:sloc:   270
+:commit: fe2ad52
+
+image::logo.png[logo,40%,align='center']
+
+== About
 
 https://eugenkiss.github.io/7guis[7GUIs] benchmark tasks implemented in https://www.red-lang.org[Red] programming language.
 
@@ -6,54 +11,86 @@ This project serves a fourfold purpose:
 
 . Fresh take on all the seven challenges, without peeking into existing solutions;
 . Baseline for comparison of Red's approach to GUI programming with other mainstream toolkits;
-. Evaluation of VID dialect and View engine, search for their potential improvements;
+. Evaluation of https://github.com/red/docs/blob/master/en/vid.adoc[VID dialect] and https://github.com/red/docs/blob/master/en/view.adoc[View engine], search for their potential improvements;
 . Testbed for GUI backends supported by View.
 
 Other known implementations:
 
-* https://github.com/greggirwin/7guis/tree/master/Red[Gregg Irwin].
+- https://github.com/greggirwin/7guis/tree/master/Red[Gregg Irwin].
 
-## Status
+== Status
 
-All 7 challenges are completed and clock under 270 lines of code, barring script headers.
+All seven challenges are complete and clock under {sloc} lines of code, barring script headers.
 
-The project was tested on all supported View backends with Red https://github.com/red/red/commit/fe2ad5264f7286b831583055a551d72aaa880d7b[`fe2ad52`]; the following issues were found:
+The project was tested on all supported View backends with Red https://github.com/red/red/commit/{commit}[`{commit}`]; the following issues were found:
 
 .Known issues.
-[cols="1,1,6"]
+[cols=".^1,1,1,5"]
 |===
-| Backend | Task | Issue
+| Backend | Task | Issue | Description
 
-| Cocoa
+| Win32
+| --
+| --
+| --
+
+.2+| Cocoa
 | link:tasks/timer.red[Timer]
+| #TODO#
 | Progress bar is not updated.
 
-| Cocoa
+// Cocoa
 | link:tasks/cells.red[Cells]
+| #TODO#
 | Spreadsheet cells are unresponsive.
 
-|  GTK
+| GTK
 | link:tasks/CRUD.red[CRUD]
+| #TODO#
 | Some critical assertions are failing inside the GTK library.
 
 |===
 
-## Structure
+== Structure
 
-link:/tasks/[Tasks]:: Solutions to 7GUIs challenges; files are named after a task they implement.
-link:review.adoc[Review]:: Case-study of the implemented tasks; follows Eugen Kiss' https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[thesis] methodology.
+link:/tasks/[`tasks/`]:: Solutions to 7GUIs challenges; files are named after a task they implement.
 
-# Setup
+link:review.adoc[`review`]:: Case-study of the above-mentioned implementations; follows Eugen Kiss' https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[thesis] methodology.
 
-. Clone project's repository.
-. Setup the Red toolchain by downloading automated build from the https://www.red-lang.org/p/download.html[official website].
-. Having toolchain binary and this repository in place, check out the implemented tasks:
-    * with `red <filename>` from system shell;
-    * from the interpreter (`do %<filename>` or `File > Run...` in Red console);
-    * or via compilation for your platform of choice (see `red --help` for details).
+== Setup
 
-Alternatively, Red console and 7GUIs tasks can be built https://github.com/red/red#running-red-from-the-sources-for-contributors[from sources].
+NOTE: If you prefer, both GUI console and toolchain can be compiled from https://github.com/red/red#running-red-from-the-sources-for-contributors[sources].
 
-# License
+To quickstart, https://www.red-lang.org/p/download.html[download] GUI Red distribution and open the console. From there, you can create a convenient shortcut:
 
-The project is released under link:COPYING[3-clause BSD license].
+[,red]
+----
+tasks: https://raw.githubusercontent.com/9214/7guis-red/master/tasks
+----
+
+And after that, simply `do` tasks directly from Github. For example:
+
+[,red]
+----
+do tasks/counter.red
+----
+
+For a more hands-on and offline experience, clone this repository and tinker directly with sources. Assuming you're in project's root directory, the example above boils down to:
+
+[,red]
+----
+do %tasks/counter.red
+----
+
+If interpreting is not enough and you wish to compile instead, download Red toolchain, then switch on encapping with release mode:
+
+[,console]
+----
+toolchain --encap --release ./tasks/counter.red
+----
+
+See `toolchain --help` for details.
+
+== License
+
+The project is released under link:COPYING[3-clause BSD license], same as Red.
