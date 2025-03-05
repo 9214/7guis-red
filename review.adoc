@@ -97,7 +97,7 @@ Compact and human-friendly code constitutes an integral part of VID's appeal. Ov
 
 The nature of VID as an eDSL is a double edged sword: it is a language with a well-defined problem domain and semantics, which nevertheless is embedded in the host, and relies on the behavior of its datatypes with evaluation model. Such "chimerical" nature of Red dialects provides the necessary leverage and reduces the complexity of a given task, but is often tends to be misunderstood: either by ignoring dialect's specificities or by forgetting its relation to the base language.
 
-Arguably, one the most problematic aspect of Red GUI system is it's reliance on language's name resolution mechanism called "binding" or "definitional scoping", coupled with an absence of modules or easy ways to localize or re-bind names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an event handler) by default resolve to the global namespace, and often tend to shadow other definitions, which leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during the implementation of link:tasks/CRUD.red[CRUD] task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
+Arguably, one the most problematic aspect of Red GUI system is its reliance on language's name resolution mechanism (called "binding" or "definitional scoping"), coupled with an absence of modules or easy ways to localize or re-bind names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an event handler) by default resolve to the global namespace, and often tend to shadow other definitions, which leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during the implementation of link:tasks/CRUD.red[CRUD] task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
 
 Another error-prone element is the structure of indirect values in Red -- that is, values that contain references to external, mutable and shareable data buffers. Modification of a buffer via one indirect value affects all the other indirect values that share the same buffer, unless said buffer is explicitly copied beforehand. While Red employs only call-by-value convention, to the uninitiated this language feature comes close to Java’s different calling semantics for primitive and reference types. In the context of View and VID, this comes up when facets (most commonly `data` or `text`) are re-used in many complex relations, or when a VID block containing indirect values (such as `string!` or `block!`) is generated with the help of meta-programming facilities.
 
@@ -290,17 +290,23 @@ NOTE: TBD.
 
 > Understanding the basic ideas of a language/toolkit and the essential scaffolding.
 
-*Abstraction level*
+Abstraction level::
+...
 
-*Closeness of mapping*
+Closeness of mapping::
+...
 
-*Hidden dependencies*
+Hidden dependencies::
+...
 
-*Error-proneness*
+Error-proneness::
+...
 
-*Diffuseness*
+Diffuseness::
+...
 
-*Viscosity*
+Viscosity::
+...
 
 ### Temperature Converter
 
@@ -308,17 +314,25 @@ NOTE: TBD.
 
 > Working with bi-directional dataflow, working with user-provided text input.
 
-*Abstraction level*
+Bi-directional transformations: lenses, Cambria project.
 
-*Closeness of mapping*
+Abstraction level::
+...
 
-*Hidden dependencies*
+Closeness of mapping::
+...
 
-*Error-proneness*
+Hidden dependencies::
+...
 
-*Diffuseness*
+Error-proneness::
+...
 
-*Viscosity*
+Diffuseness::
+...
+
+Viscosity::
+...
 
 ### Flight Booker
 
@@ -326,17 +340,23 @@ NOTE: TBD.
 
 > Working with constraints.
 
-*Abstraction level*
+Abstraction level::
+...
 
-*Closeness of mapping*
+Closeness of mapping::
+...
 
-*Hidden dependencies*
+Hidden dependencies::
+...
 
-*Error-proneness*
+Error-proneness::
+...
 
-*Diffuseness*
+Diffuseness::
+...
 
-*Viscosity*
+Viscosity::
+...
 
 ---
 
@@ -348,17 +368,23 @@ NOTE: TBD.
 
 > Working with concurrency, working with competing user/signal interactions, keeping the application responsive.
 
-*Abstraction level*
+Abstraction level::
+...
 
-*Closeness of mapping*
+Closeness of mapping::
+...
 
-*Hidden dependencies*
+Hidden dependencies::
+...
 
-*Error-proneness*
+Error-proneness::
+...
 
-*Diffuseness*
+Diffuseness::
+...
 
-*Viscosity*
+Viscosity::
+...
 
 ### CRUD
 
@@ -366,17 +392,23 @@ NOTE: TBD.
 
 > Separating the domain and presentation logic, managing mutation, building a non-trivial layout.
 
-*Abstraction level*
+Abstraction level::
+...
 
-*Closeness of mapping*
+Closeness of mapping::
+...
 
-*Hidden dependencies*
+Hidden dependencies::
+...
 
-*Error-proneness*
+Error-proneness::
+...
 
-*Diffuseness*
+Diffuseness::
+...
 
-*Viscosity*
+Viscosity::
+...
 
 ---
 
@@ -388,17 +420,23 @@ NOTE: TBD.
 
 > Implementing undo/redo functionality, custom drawing, implementing dialog control (i.e. keeping context between successive GUI operations).
 
-*Abstraction level*
+Abstraction level::
+...
 
-*Closeness of mapping*
+Closeness of mapping::
+...
 
-*Hidden dependencies*
+Hidden dependencies::
+...
 
-*Error-proneness*
+Error-proneness::
+...
 
-*Diffuseness*
+Diffuseness::
+...
 
-*Viscosity*
+Viscosity::
+...
 
 ---
 
@@ -410,17 +448,23 @@ NOTE: TBD.
 
 > Implementing change propagation, customizing a widget, implementing a more authentic/involved GUI application.
 
-*Abstraction level*
+Abstraction level::
+...
 
-*Closeness of mapping*
+Closeness of mapping::
+...
 
-*Hidden dependencies*
+Hidden dependencies::
+...
 
-*Error-proneness*
+Error-proneness::
+...
 
-*Diffuseness*
+Diffuseness::
+...
 
-*Viscosity*
+Viscosity::
+...
 
 ---
 
