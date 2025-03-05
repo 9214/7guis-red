@@ -1,7 +1,14 @@
-:sloc:   270
+:count:  270
 :commit: fe2ad52
 
+ifdef::env-github[]
+++++
+<p align="center"><img width="40%" src="logo.png"></p>
+++++
+endif::[]
+ifndef::env-github[]
 image::logo.png[logo,40%,align='center']
+endif::[]
 
 == About
 
@@ -20,7 +27,7 @@ Other known implementations:
 
 == Status
 
-All seven challenges are complete and clock under {sloc} lines of code, barring script headers.
+All seven challenges are complete and clock under {count} lines of code, barring script headers.
 
 The project was tested on all supported View backends with Red https://github.com/red/red/commit/{commit}[`{commit}`]; the following issues were found:
 
@@ -75,14 +82,14 @@ And after that, simply `do` tasks directly from Github. For example:
 do tasks/counter.red
 ----
 
-For a more hands-on and offline experience, clone this repository and tinker directly with sources. Assuming you're in project's root directory, the example above boils down to:
+For a more hands-on and offline experience, clone this repository to tinker directly with sources. Assuming you're in project's root directory, the example above boils down to:
 
 [,red]
 ----
 do %tasks/counter.red
 ----
 
-If interpreting is not enough and you wish to compile instead, download Red toolchain, then switch on encapping with release mode:
+If running interpreter is not enough and you wish to compile instead, download Red toolchain, then switch on encapping with release mode:
 
 [,console]
 ----
