@@ -2,7 +2,7 @@ Red [
 	Title:  "Circle Drawer"
 	Number: 6
 	Author: @9214
-	Date:   30/10/2019
+	Date:   30-Oct-2019
 	Needs:  View
 ]
 
