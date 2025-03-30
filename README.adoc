@@ -27,7 +27,7 @@ Other known implementations:
 
 == Status
 
-All seven challenges are complete and clock under {count} lines of code, barring script headers.
+All seven challenges are complete and clock under {count} lines of code, barring script headers. Original https://eugenkiss.github.io/7guis-React-TypeScript-MobX/[solutions] in React/TypeScript/MobX were used as a reference implementation.
 
 The project was tested on all supported View backends with Red https://github.com/red/red/commit/{commit}[`{commit}`]; the following issues were found:
 
@@ -42,17 +42,17 @@ The project was tested on all supported View backends with Red https://github.co
 | --
 
 .2+| Cocoa
-| link:tasks/timer.red[Timer]
+| link:tasks/4.timer.red[Timer]
 | #TODO#
 | Progress bar is not updated.
 
 // Cocoa
-| link:tasks/cells.red[Cells]
+| link:tasks/7.cells.red[Cells]
 | #TODO#
 | Spreadsheet cells are unresponsive.
 
 | GTK
-| link:tasks/CRUD.red[CRUD]
+| link:tasks/5.crud.red[CRUD]
 | #TODO#
 | Some critical assertions are failing inside the GTK library.
 
@@ -60,9 +60,9 @@ The project was tested on all supported View backends with Red https://github.co
 
 == Structure
 
-link:/tasks/[`tasks/`]:: Solutions to 7GUIs challenges; files are named after a task they implement.
+link:/tasks/[`tasks/`]:: Solutions to 7GUIs challenges, one file per task.
 
-link:review.adoc[`review`]:: Case-study of the above-mentioned implementations; follows Eugen Kiss' https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[thesis] methodology.
+link:review.adoc[`review`]:: Case-study of the above-mentioned solutions; follows Eugen Kiss' https://github.com/eugenkiss/7guis/blob/master/thesis.pdf[thesis] methodology.
 
 == Setup
 
