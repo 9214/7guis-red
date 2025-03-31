@@ -8,11 +8,11 @@ Red [
 
 view [
 	title "Temperature Converter"
-	celsius: field react [
+	celsius: field on-key-up [
 		if number? face/data [fahrenheit/data: face/data * 9 / 5 + 32]
 	]
 	text "Celsius ="
-	fahrenheit: field react [
+	fahrenheit: field on-key-up [
 		if number? face/data [celsius/data: face/data - 32 * 5 / 9]
 	]
 	text "Fahrenheit"
