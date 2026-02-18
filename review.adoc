@@ -7,7 +7,7 @@
 
 This writeup presents an analysis of https://www.red-lang.org/[Red] programming language's approach to Graphical User Interface (GUI) programming in the form of a case study. It concerns itself with https://eugenkiss.github.io/7guis/tasks[7GUIs tasks] implemented in Red, and was conceived as a research on potential improvements in its https://github.com/red/docs/blob/master/en/gui.adoc[GUI system]: footnote:[Due to specificity of 7GUIs tasks Rich-Text Dialect (RTD) was not evaluated.]
 
-- cross-platform graphical engine https://github.com/red/docs/blob/master/en/view.adoc[View],
+- cross-platform graphical engine, https://github.com/red/docs/blob/master/en/view.adoc[View],
 - embedded Domain-Specific Language (eDSL) for declarative user interface specification, https://github.com/red/docs/blob/master/en/vid.adoc[VID] (Visual Interface Dialect),
 - and, to a lesser extent, eDSL for drawing raster graphics, https://github.com/red/docs/blob/master/en/draw.adoc[Draw].
 
@@ -39,7 +39,7 @@ In general, GUI applications made with Red are written at the high level of abst
 
 Creation of custom widgets with unique style (like e.g. material design) currently requires usage of `base` face, Draw dialect and external scaffolding in the form of event-processing and change-propagating code.footnote:[See Boleslav Březovský's http://red.qyz.cz/writing-style.html[article] on custom VID styles and https://codeberg.org/hiiamboris/red-spaces[Red Spaces] project for examples.] Customization of the basic set of widgets is possible to a certain extent, but is ultimately limited due to specificities of the underlying backends.
 
-High level of expressiveness is made possible by the synergy of language properties, such syntactically-rich type system, data-driven bent towards problem solving, and general orientation towards small-scale, linguistic abstractions with simple semantics. Indeed, both VID and View are the prime examples of such approach towards language design.footnote:[This resonates strongly with https://en.wikipedia.org/wiki/Logo_(programming_language)[Logo] heritage of Rebol and its derivates, Red itself included.]
+High level of expressiveness is made possible by the synergy of language properties, such syntactically-rich type system, data-driven bent towards problem solving, and general orientation towards small-scale, linguistic abstractions with simple semantics. Indeed, both VID and View are the prime examples of such approach towards language design.footnote:[This resonates strongly with https://en.wikipedia.org/wiki/Logo_(programming_language)[Logo] heritage of Rebol and its derivatives, Red itself included.]
 
 ==== Closeness of mapping
 
@@ -97,7 +97,7 @@ Compact and human-friendly code constitutes an integral part of VID's appeal. Ov
 
 The nature of VID as an eDSL is a double edged sword: it is a language with a well-defined problem domain and semantics, which nevertheless is embedded in the host, and relies on the behavior of its datatypes with evaluation model. Such "chimerical" nature of Red dialects provides the necessary leverage and reduces the complexity of a given task, but is often tends to be misunderstood: either by ignoring dialect's specificities or by forgetting its relation to the base language.
 
-Arguably, one the most problematic aspect of Red GUI system is its reliance on language's name resolution mechanism (called "binding" or "definitional scoping"), coupled with an absence of modules or easy ways to localize or re-bind names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an event handler) by default resolve to the global namespace, and often tend to shadow other definitions, which leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during the implementation of link:tasks/CRUD.red[CRUD] task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
+Arguably, one the most problematic aspect of Red GUI system is its reliance on language's name resolution mechanism (called "binding" or "definitional scoping"), coupled with an absence of modules or easy ways to localize or re-bind names without writing boilerplate code. Symbolic identifiers introduced in VID block (for example, in the body of an actor) by default resolve to the global namespace, and often tend to shadow other definitions, which leads to hard to catch bugs.footnote:[See one of the https://github.com/red/red/issues/972#issuecomment-650814221[examples] on Red issue tracker, derived during the implementation of <<_crud, CRUD>> task.] Granted, this problem is not unique to VID, but rather presents a historical design challenge in the Rebol family of languages.
 
 Another error-prone element is the structure of indirect values in Red -- that is, values that contain references to external, mutable and shareable data buffers. Modification of a buffer via one indirect value affects all the other indirect values that share the same buffer, unless said buffer is explicitly copied beforehand. While Red employs only call-by-value convention, to the uninitiated this language feature comes close to Java’s different calling semantics for primitive and reference types. In the context of View and VID, this comes up when facets (most commonly `data` or `text`) are re-used in many complex relations, or when a VID block containing indirect values (such as `string!` or `block!`) is generated with the help of meta-programming facilities.
 
@@ -105,7 +105,7 @@ View engine presents virtual tree of faces as a data-oriented, minimal programmi
 
 Given that VID recognizes both `tuple!` (RGBA) and `issue!` (hex-encoded) values as valid color denotations, a common mistake is to set `color` facet to `issue!` and expect a change in the background, whereas this setting is simply ignored. What seems to be required in such cases is _operational specification_, which would limit a given facet to a limited number of datatypes, and further restrict values on these datatypes to the allowed range: for example, `issue!` values that hex-encode colors, or `tuple!` values with strictly 3 or 4 elements. Object ownership system, on which the reactive framework is based, can achieve that.footnote:[See `system/locale/currencies` object, designed as a proof-of-concept for such form of object field's protocoling; it monitors the list of currencies and enforces only specific set of user interactions with it, constraining the content of the list not only to the values of specific datatype, but values with specific properties _within_ the datatype.]
 
-Finally, errors can emerge during the user interaction with a created GUI: an unspecified event handler, a missed edge-case, an unanticipated scenario, a quirk in the underlying OS-specific widget. Manual or automated GUI testing can catch these forms of mistakes, but is quite non-trivial to implement in platform-independent way. The initial work on https://codeberg.org/hiiamboris/red-view-test-system[Red/View testing framework] and existence of the https://www.red-lang.org/2017/07/063-macos-gui-backend.html[null backend] (described at the beginning of "View engine" section) set the stage for this line of development.
+Finally, errors can emerge during the user interaction with a created GUI: an unspecified actor, a missed edge-case, an unanticipated scenario, a quirk in the underlying OS-specific widget. Manual or automated GUI testing can catch these forms of mistakes, but is quite non-trivial to implement in platform-independent way. The initial work on https://codeberg.org/hiiamboris/red-view-test-system[Red/View testing framework] and existence of the https://www.red-lang.org/2017/07/063-macos-gui-backend.html[null backend] (described at the beginning of "View engine" section) set the stage for this line of development.
 
 ==== Diffuseness
 
@@ -247,7 +247,7 @@ TypeScript, React, MobX:: 279 SLOC of external scaffolding, 7 SLOC of helpers.
 
 It follows that the Red implementation under discussion is the smallest fully functional one in terms of the total SLOC count, even with the leg-up of counting non-essential script headers containing meta-information (7 SLOC per task), taking the helping code under consideration (e.g. undo/redo functionality in <<_circle_drawer, Circle Drawer>>, formula parser and evaluator in <<_cells, Cells>>), and a bit excessive code formatting -- a by-product of adherance to the https://github.com/red/docs/blob/master/en/style-guide.adoc[official style guide] and avoidance of intentional code-golfing.
 
-Indeed, Red programs generally show low levels of diffuseness and boilerplate, without extreme density (cf. APL family). Speaking of VID, not only the line count in it is low, but the number of distinct notational elements (at the level of symbolic description) is also quite modest: any given VID specification includes information about widget's positioning, the content of its facets, and provided event handlers. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_.footnote:[Taking a certain ontological stance, one can name these aspects _essences_ that, when combined, form the notational entities.]
+Indeed, Red programs generally show low levels of diffuseness and boilerplate, without extreme density (cf. APL family). Speaking of VID, not only the line count in it is low, but the number of distinct notational elements (at the level of symbolic description) is also quite modest: any given VID specification includes information about widget's positioning, the content of its facets, and provided actors. Parelleling the HTML/CSS/JS trichotomy, we might call these aspects _structure_, _style_ and _substance_.footnote:[Taking a certain ontological stance, one can name these aspects _essences_ that, when combined, form the notational entities.]
 
 The main factors contributing to near-absence of diffuseness are meta-programming facilities (e.g. generating spreadsheet in <<_cells, Cells>>) and data orientation: a small set of core primitives working seamlessly across the board, and acting on value literals that can produce the meaning of their own; syntax determines semantics.
 
@@ -274,65 +274,73 @@ Last but not least, in case of GUIs the biggest resistance to change comes from 
 
 ## Tasks
 
-NOTE: TBD.
-
-https://eugenkiss.github.io/7guis/tasks
-
-https://eugenkiss.github.io/7guis-React-TypeScript-MobX[Reference implementation] created with React, TypeScript and MobX.
-
-Reference, rationale behind each task, samples.
-
-Each section below evaluates respective task's solution according to the CD guidelines described in <<Introduction>>. See §3.1 ¶12.
+Each section below evaluates respective task's solution according to the CD guidelines described in the <<Introduction>>.
 
 ### Counter
-
-NOTE: TBD.
 
 > Understanding the basic ideas of a language/toolkit and the essential scaffolding.
 
 Abstraction level::
-...
+This is a by-the-book solution that requires only the basic familiarity wtih View engine: faces, facets, and actors.
 
 Closeness of mapping::
-...
+Solution maps directly onto challenge's description, without any additional scaffolding.
 
 Hidden dependencies::
-...
+Described in View documentation, yet not explicitly stated in the code itself:
+- Sync between `text` and `data` facets in `field` face;
+- Default `on-click` actor for `button` face;
+- Default left-to-right ordering of faces.
 
 Error-proneness::
-...
+Given that the challenge is supposed to serve as a gentle introduction to language and GUI framework, newbie's chance of getting it right the first time is rather high. The VID notation itself doesn't demand more cognitive load than necessary; therefore, any mistakes that might happen are either "baby's first steps" or part of the experimentation with the new tooling.
 
 Diffuseness::
-...
+Minimal.
 
 Viscosity::
-...
+None.
+
+Commentary::
+On error-proneness:
+- In general, relying on implicit defaults might yield unexpected results, clashing with tacit assumptions about the code. On the other hand, explicit control comes at the cost of extra verbosity, which itself widens the error hit surface: the more you tell, the more likely you'll misspell. All of that also ties into runtime's stability guarantees.
+- A good UX question to ask is just how user-friendly the errors are supposed to be: should they forgive common mistakes (think JavaScript's tolerance), or rather be strict and up-front about the rules of notation? Should the language have opt-out "training wheels" for that (akin to gradual typing)?
+
++
+On diffuseness:
+- Comparative studies such as these would benefit from https://adventofcode.com/[Advent of Code] structure: first, the basic solution is implemented, but then new requirements are presented that check how easily changes can be integrated therein.
 
 ### Temperature Converter
 
-NOTE: TBD.
-
 > Working with bi-directional dataflow, working with user-provided text input.
 
-Bi-directional transformations: lenses, Cambria project.
-
 Abstraction level::
-...
+No special constructs for such bi-directional binding are required, however: we simply leverage reactive model and establish relations between data facets via temperature conversion formulas. Data validity is checked on data content itself with `number?` predicate, while `face!` reactors manage cycle breaking by themselves.
 
 Closeness of mapping::
-...
+Implementation reflects task requirements to the letter, no shenanigans.
 
 Hidden dependencies::
-...
+Same as in <<_counter, Counter>>, but also an https://en.wikipedia.org/wiki/Anaphoric_macro[anaphoric] `face` parameter in both actors.
 
 Error-proneness::
-...
+- Red's absence of operator's precedence (in formulas for temperature conversion), but that's not related to View or VID.
+- The above is somewhat acerbated by the need to write out conversion formula twice, i.e. for each left-hand side. Conventional https://en.wikipedia.org/wiki/Order_of_operations[PEMDAS] order can be enforced via `math` dialect.
 
 Diffuseness::
-...
+Minimal.
 
 Viscosity::
-...
+- If conversion-related requirements are changed, then both event handlers need a synchronous update. One wonders if Celsius-Fahrenheit relation can somehow be encoded/inferred only once, following https://en.wikipedia.org/wiki/Single_source_of_truth[SPOT] architecture principles, without writing two separate formulas.
+- Perhaps duplicated validation logic can be factored out into View style with a theoretical pre-condition construct: "reaction/event is processed only if it passes such-and-such predicate"; in our case, that would be "if text can be converted to numeral".
+- Additionaly, there might be a way to specify _how_ `text` facet should be converted to `data`; currenly it defaults to `attempt [load face/text]]`. It is possible to do this conversion without rendering any changes in deffered update mode (i.e. with disabled `system/view/auto-sync?` flag and explicit `show`), but that's too coarse-grained and manual.
+
+Commentary::
+- In addition to interaction with the end user, this task also features a mutual interplay between UI components. This feels like a well thought-out increase in difficulty, which gradually introduces new sources of events into the system: like particles in the force fields.
+- Topics tangentially related to bi-directional transformations in programming languages:
+* Functional lenses and https://www.inkandswitch.com/cambria/[Cambria] project;
+* J's https://code.jsoftware.com/wiki/Vocabulary/Inverses[obverses];
+* Prolog-like inference engines.
 
 ### Flight Booker
 
@@ -341,26 +349,38 @@ NOTE: TBD.
 > Working with constraints.
 
 Abstraction level::
-...
+- Usage of `below` to switch to vertical flow of widgets' layout.
+- Usage of `style` to encode common constraints of two flight date input fields.
+- Evaluation of inline expressions for some facets, e.g. `data`.
+- Red has a set of default color names, which are represented as `tuple!` values.
+- Faces can be disabled and enabled on-demand.
+- One can call View from within View, to open another window(s).
+So: layout, style properties, state, hierarchy.
 
 Closeness of mapping::
-...
+- Each face's constraints are held inside a dedicated reactive formula or event handler, as a single logical expression.
+- Vertical layout is mapped by the layout of VID block itself, which in turn is just a 1-to-1 encoding of requirements.
 
 Hidden dependencies::
-...
+- Usage of face.
+- Many `date!` datatype syntax forms, no way to force conformity between formats.
 
 Error-proneness::
-...
+- Implementing constraints with `all` and `any` might be non-trivial, but again, this is not related to View and VID.
+- Interacting not only with user but with problem domain, which "speaks" in constraints (deontic modalities, requirement specification and feature interactions).
 
 Diffuseness::
-...
+- The bulk of the implementation is taken by button face with encoded constraints and formatting of displayed message for "Confirmation" window; these can be factored out, in such case whole task would take 10-15 lines to implement.
 
 Viscosity::
-...
+- `option` drop-down list: integer indices rather than symbolic keys, order-dependent.
+- If requirements WRT supported date formats are changed, all we'll need to do is to implement `date!` parser ourselves and swap `face/data` for `face/text`.
+- Logical constraints of each widget are localized, and can be handled separately, with no changes required in other parts of the program.
 
----
-
-Complex predicates and guards.
+Commentary::
+- Complex predicates and guards. Policy language: https://www.openpolicyagent.org/docs/policy-language[Rego] or https://cuelang.org/[CUE] (both Go flavored), Datalog and Prolog.
+- String interpolation, templating. https://github.com/red/red/pull/5085
+- Requirement specifications: work of Michael Jackson, Alloy, formal methods.
 
 ### Timer
 
@@ -369,22 +389,33 @@ NOTE: TBD.
 > Working with concurrency, working with competing user/signal interactions, keeping the application responsive.
 
 Abstraction level::
-...
+Timer is modeled as a text label with on-time handler and rate 100 per second, which ticks indefinitely, updates elapsed gauge value, and, if elapsed time is less than timer's duration, updates data facet with current time estimation. I've omitted using custom time formatting and leveraged time! value here, for simplicity.
++
+The whole thing stops updating as soon as elapsed/data reaches 100%, although the timer still ticks and updates time with elapsed/data.
++
+The only new concept to learn here is on-time and timer's rate.
 
 Closeness of mapping::
-...
+Natural (reasoning in terms of linear timeline), although I sense an inversion of control: timer orchestrates everything instead of each face periodically probing timer's value and adjusting their facets... but they can do that only if they are timers themselves.
 
 Hidden dependencies::
-...
+None.
 
 Error-proneness::
-...
+Minimal.
 
 Diffuseness::
-...
+Minimal; compared to the https://github.com/9214/7guis/blob/bba0c7bce59bf8b467a20dcbd29f1b3c39f119a1/Red/timer.red[initial attempt], the final version is twice as small, and I'd say far more simple to reason about. I esp. like the trick with 100% comparison — a different, more succint way to express e < d requirement.
++
+In the initial attempt, most of the space was taken by time formatting and timer reset helpers.
 
 Viscosity::
-...
+The only place where change can occur is timer's logic inside on-time handler. You can notice that in initial attempt timer stopped after gauge was filled, and resumed after slider adjustments — that required explicit reset of timer's rate outside of timer. Since timer is the thing that orchestrated everything, disabling rate from within timer effectively stopped updating other facets; in the final implementation timer keeps kicking, but omits updating it's data facet.
+
+Commentary::
+Red doesn't have async, so this challenge is more of a View-specific hack, since only the engine is capable of polling events in the background thread.
++
+Interactions (sources of events): user, UI elements, time.
 
 ### CRUD
 
@@ -393,26 +424,48 @@ NOTE: TBD.
 > Separating the domain and presentation logic, managing mutation, building a non-trivial layout.
 
 Abstraction level::
-...
+Domain and presentation logic are clearly separated, dovetailing MVC pattern and leveraging reactivity with Red's rich set of aggregate structures (map! in this case).
++
+The mapping between the model and its representation is modeled via reactive relations. Actual DB entry is tracked via somewhat-awkward mapping between indices in selected view and underlying representation — I'm sure there are more idiomatic and conventional ways to achieve that.
 
 Closeness of mapping::
-...
+Introduced panel to group text label together and explicit sizing of listbox via pair! value. Even though requirement of layout became more complex, we still use VID with no additional tricks.
++
+Notice that I had to disable GUI rules, to keep delete button where it should be (IIRC on macOS it would stick to the left, following "Cancel OK" button flow).
 
 Hidden dependencies::
-...
+Perhaps the way series' indices work and how listbox/extra is leveraged — that required implicit knowledge of Red series and related actions.
 
 Error-proneness::
-...
+Got bitten by the absence of copy face/text, but that's unrelated. Initially filtering logic was flawed, but, again, this has to do with me not paying attention. The trickiest part of whole app is syncing listbox/extra with selected entry.
 
 Diffuseness::
-...
+The bulk of the implementation is taken by model implementation and encoding of CRUD logic.
 
 Viscosity::
-...
+In terms of CRUD, our interface is pretty complete. What might change is the underlying representation — but GUI is more-or-less abstracted from that.
 
----
+Commentary::
+https://sam.js.org/#
++
+MVC pattern and lack of dedicated framework thereof (compare to Elm), real-world DB (either RDBMS or in-memory) example.
++
+----
+Red []
 
-MVC pattern.
+thing: deep-reactor [
+	model: ["AB" "CD"]
+	view:  is [foreach entry model [none]]
+]
+
+entry: thing/model/1
+entry/1: #"X"
+entry/2: #"Y"
+
+probe thing/model
+----
++
+↑ speaking of surprise factor, that was a funny one... iterator's words definitely need to have a local context.
 
 ### Circle Drawer
 
@@ -421,25 +474,40 @@ NOTE: TBD.
 > Implementing undo/redo functionality, custom drawing, implementing dialog control (i.e. keeping context between successive GUI operations).
 
 Abstraction level::
-...
+Using Draw dialect to draw on canvas.
++
+Undo / redo and manipulation of Draw block heavily leverages series model. History is implemented as a series of deltas, each keeping track of position in Draw block and old / new values (either changed radius or newly created circle).
 
 Closeness of mapping::
-...
+Mutation of circle's parameters is rather intuitive, but keeping (and applying) deltas is a bit too high-level for a casual observer, although very idiomatic.
 
 Hidden dependencies::
-...
+The relation between indices and elements of a circle are non-obvious, which can be bypassed by something like set [color center radius][-3 -1 1] and usage of path/:index notation.
++
+Orientation of history (new at the head, old at the tail) is an implementation detail which is not completely abstracted away (not related to View or VID though).
++
+A level of indirection between event/offset in stroke and actual event in on-down handler.
++
+All used words are global, which simplifies interaction between "Adjust radius" popup and top-level window, but that's not explicitly mentioned anywhere, and might come as a surprise if two words clash with each other.
 
 Error-proneness::
-...
+Using relative offsets in Draw block requires a bit of discipline.
 
 Diffuseness::
-...
+Minimal.
 
 Viscosity::
-...
+Change of drawed shape will require adjustment of relative indices.
++
+Popup relies on gray color to keep track of selected circle.
++
+Support of hypothetical drag-n-drop operation would require creation of new even handler with history update (the parameter that changes is circle's position), IMO in such case viscosity is very small.
++
+History is a block! so it can be saved on a disk and restored / replayed, providing a persistent state... the only problem is that references to canvas positions inside deltas are not serialized, and on load will look like totally distinct blocks; so, that will require a bit of boilerplate code to support properly, e.g. store integer! offsets instead, and serialize deltas together with global Draw block. — Redbin can serialize cycles and references.
++
+Another, more simple (but costly) approach (which I initially used) is simply to track copies of canvas, without any delta-based versioning.
 
----
-
+Commentary::
 Persistent data structures. Mention https://gist.github.com/numberjay/3df8f13044145c6dde1918ea2cdfe3b8[PoC]?. On-disk serialization with https://github.com/red/docs/blob/master/en/redbin.adoc[Redbin] format.
 
 ### Cells
@@ -449,25 +517,40 @@ NOTE: TBD.
 > Implementing change propagation, customizing a widget, implementing a more authentic/involved GUI application.
 
 Abstraction level::
-...
+In terms of sophistication, this task leverages many high-level Red constructs, starting with Parse for formula processing and collect for cell grid generation, and ending with much more involved usage of View — making pane with layout/only, making face! objects manually and using them as prototypes for customization, detecting descendants of the cell! prototype with class-of, etc.
++
+Implementation is quick and simple, so cells are referenced via words, without any underlying MV* model; initially, I thought about keeping track of them via aggregate structure, but that would warrant a more complex formula processing or ad-hoc notation (e.g. A/1). With the current approach, cells are references by generated words, which you can directly mention in formulas (e.g. A1 or X23).
++
+Reactive relations between cells are dirt cheap to implement, thanks to the reactive framework; but they still require a bit of boilerplate to counter all edge-cases.
++
+Due to Red's nature, we get support for all datatypes (not just numerals) for free + ACE as a bonus (you can literally close the app by typing = q and hitting enter in a cell; how cool is that?).
 
 Closeness of mapping::
-...
+Due to data and text syncronization, you can get awkward reactions if something that is supposed to be pure text or formula is treated as loaded data (e.g. one cell will mimick formula in another cell as you type it).
++
+Otherwise it's a pretty slick toy spreadsheet.
 
 Hidden dependencies::
-...
+Reactive framework, I guess, and how generated words reference cells.
++
+Faces being objects with classes, which ID we use to search for cells.
++
+Grid generation depends on existence of label! and cell! prototypes.
 
 Error-proneness::
-...
+Cell's UI logic is fairly complicated (swapping between formula and data, making cell responsive), so as establishing new relation in a cell — you need to pre-process formula, save formula's text, then unlink any previous existent relations and counter self-referential formulas, then either set a new relation or, if it fails, just evaluate expression.
++
+You can shoot yourselves in a foot with ACE. secure dialect is needed.
 
 Diffuseness::
-...
+In the absence of native table widget, generation of spreadsheet from field and base faces takes roughly 1/3 of the implementation. Cell UI could be expressed more cleaner as some sort of a dedicated state machine (map between facets's states and called events, which make state transition).
 
 Viscosity::
-...
+Grid generation, widget's customization and formula processing logic are all clearly separated, and can be tackled independently. I'd say viscosity is kept minimal, and only 1/3 of the implementation is concerned with VID and View, the rest is pure Red. I specifically used layout/only with VID block to keep widget's customization declarative and simple.
++
+Spreadsheet itself, being just a block of faces, can be plugged anywhere as a pane.
 
----
-
+Commentary::
 Abstraction level -- abusing `field` as table cell widget and generating layout with metaprogramming.
 
 `gob!`-based spreadsheets and limits of the current approach.
